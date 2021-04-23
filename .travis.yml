@@ -4,7 +4,7 @@ jdk:
 
 addons:
   sonarcloud:
-    organization: markdrei
+    organization: "markdrei"
     token:
       secure: "gU5q4bwgOpDqsNpGO3308DNmbTLMzD8pGl55//j4XVqsUaShBqvClYDhp0zHHRM0C/fDYVaLJs7hyjG3epOnMmL9SDSyZO59Gfw9PasOHtGLhmRkja+1j1zVIA7YUJ1sf27DeFmDwz84rIDKMsxVEN1YeRAWBWbwCePrqJT2vuJB6HqsqGKcO7l9x9BGmYujPtSCmKAeZ+KjD/FkhiytXq9/+/1hJeEgm8sxBv7c7Z/YTWvNOiW2A3rzLt2lCW+m+O6Lclaiz90Ak4kySLxkdHqSfNooFRedb2SAL9OwlcnTh9XX5NMNUO70tSDMi68EOp8WH19+ksP1WddiKTzLxmaPHrfQFrPBQStP6iYOc2fn8WpbATdXr+0EPMev2+ILJuCdhE94BhMqAeO4Pf/ysLsBJP3I9s+jBCW4eSU0/jY7EsgCXQt68B8glEFkCNWvNXm/c8H8MB01n5A4qB6Sn4gvkhW3kVkuaKQCPsHTxmrrrtUwSOb5qMzLkGrNZOz/oxGtGjm6IHXGAa/a8kbRsnMq/BISp9e7T1t/b5wGw47JAd/ilsSm1Twln70w0rbouCRyXGNMghV7mU6EIeUQ3iLgOUHSqi2gix24Aq84F49QD2sA5GRNBKmPkeEq+k/sekdtiNX+gtfyT5zCazEeGaoPJMzhRJIz9fxhiyKulR4="
 
