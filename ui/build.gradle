@@ -19,6 +19,6 @@ dependencies {
 }
 
 application {
-  mainClass.set("de.rkable.spaceTCG.display.Main")
+  mainClass = "de.rkable.spaceTCG.display.Main"
 }
 
