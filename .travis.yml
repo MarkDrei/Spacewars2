@@ -1,0 +1,15 @@
+language: java
+jdk:
+- oraclejdk11
+
+addons:
+  sonarcloud:
+    organization: markdrei
+    token:
+      secure: 'hUhnATIrdTdgdnY3jkIZuPvuVvsftBUE7R/oIJ9VHTbNgtStVF72DTRvDPV2A53/gbj2tX41H3E6d3BmmvQqlm5KltXKyRtLfIt/wOWvOEjupKxeB+MZuNeeUyvNUDxHRfgs+Eqp7mTAox3UHV2MwDiktfIDit2fNYIHO4yL70XHDcyPf1jCSzrY16xZ4Q6AF5fqLK4E33sTtqTvmgGWDVuG0yP56WRSUpazGfgiVR/CRckV73EGvsW9VtXUxLgUWlkdihDmG8t/wTvSxZxmxEzTe58SzQXF5zsHBmShQJCvxvcNh66PxUwTFWtQtjJuW1vP1oGj6/E7jsA6sLCyHB6d6I9WDHWdtZNlR9dLGD/Fejg8ALR4AUzUKAXtNXh1hG5w2s9s9NVQmCOk6k3oxVom3bHHMgV7OOQCClxilhIONR3Nnas5HJfZjF6Tt37eOtXo26fiIk+coiIOIbmLlBz+s+REg5F6ckP5z2zXqzJqSiEMsldM9WlDV4b/+3jBcXu69EPzd96cs/d/6kIkM18fb6f2aDWeezbG4ISO5oUYc0LnlBiXNpOGvXtlCzCtA9qsdsXWgGP6z0MbwHDgWqIKx3xQj9WVlWqxMFURiNMTKAHyXSVMfaAz54sxoBIBqucPxd1I/3bpxhPYkAFyEtEmv+yTMHtJ80/SMJDS+CE='
+
+script:
+- ./gradlew check
+- ./gradlew jacocoTestReport
+- sonar-scanner
+

@@ -1,0 +1,24 @@
+
+plugins {
+    id 'java'
+    id "application"
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+sourceCompatibility = 1.11
+
+dependencies {
+    implementation project(':core')
+    implementation ('org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.+')
+    testImplementation (platform('org.junit:junit-bom:5+'))
+    testImplementation ('org.junit.jupiter:junit-jupiter')
+}
+
+application {
+  mainClass.set("de.rkable.spaceTCG.display.Main")
+}
+
