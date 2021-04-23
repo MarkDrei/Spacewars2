@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'application'
+    id "org.sonarqube" version "3.1.1"
 }
 
 repositories {
@@ -24,4 +25,10 @@ test {
 //        events "skipped", "failed"
         events "passed", "skipped", "failed"
     }
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "MarkDrei_Spacewars2"
+  }
 }

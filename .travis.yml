@@ -2,14 +2,15 @@ language: java
 jdk:
 - oraclejdk11
 
-#addons:
-#  sonarcloud:
-#    organization: markdrei
-#    token:
-#      secure: 'hUhnATIrdTdgdnY3jkIZuPvuVvsftBUE7R/oIJ9VHTbNgtStVF72DTRvDPV2A53/gbj2tX41H3E6d3BmmvQqlm5KltXKyRtLfIt/wOWvOEjupKxeB+MZuNeeUyvNUDxHRfgs+Eqp7mTAox3UHV2MwDiktfIDit2fNYIHO4yL70XHDcyPf1jCSzrY16xZ4Q6AF5fqLK4E33sTtqTvmgGWDVuG0yP56WRSUpazGfgiVR/CRckV73EGvsW9VtXUxLgUWlkdihDmG8t/wTvSxZxmxEzTe58SzQXF5zsHBmShQJCvxvcNh66PxUwTFWtQtjJuW1vP1oGj6/E7jsA6sLCyHB6d6I9WDHWdtZNlR9dLGD/Fejg8ALR4AUzUKAXtNXh1hG5w2s9s9NVQmCOk6k3oxVom3bHHMgV7OOQCClxilhIONR3Nnas5HJfZjF6Tt37eOtXo26fiIk+coiIOIbmLlBz+s+REg5F6ckP5z2zXqzJqSiEMsldM9WlDV4b/+3jBcXu69EPzd96cs/d/6kIkM18fb6f2aDWeezbG4ISO5oUYc0LnlBiXNpOGvXtlCzCtA9qsdsXWgGP6z0MbwHDgWqIKx3xQj9WVlWqxMFURiNMTKAHyXSVMfaAz54sxoBIBqucPxd1I/3bpxhPYkAFyEtEmv+yTMHtJ80/SMJDS+CE='
+addons:
+  sonarcloud:
+    organization: markdrei
+    token:
+      secure: "gU5q4bwgOpDqsNpGO3308DNmbTLMzD8pGl55//j4XVqsUaShBqvClYDhp0zHHRM0C/fDYVaLJs7hyjG3epOnMmL9SDSyZO59Gfw9PasOHtGLhmRkja+1j1zVIA7YUJ1sf27DeFmDwz84rIDKMsxVEN1YeRAWBWbwCePrqJT2vuJB6HqsqGKcO7l9x9BGmYujPtSCmKAeZ+KjD/FkhiytXq9/+/1hJeEgm8sxBv7c7Z/YTWvNOiW2A3rzLt2lCW+m+O6Lclaiz90Ak4kySLxkdHqSfNooFRedb2SAL9OwlcnTh9XX5NMNUO70tSDMi68EOp8WH19+ksP1WddiKTzLxmaPHrfQFrPBQStP6iYOc2fn8WpbATdXr+0EPMev2+ILJuCdhE94BhMqAeO4Pf/ysLsBJP3I9s+jBCW4eSU0/jY7EsgCXQt68B8glEFkCNWvNXm/c8H8MB01n5A4qB6Sn4gvkhW3kVkuaKQCPsHTxmrrrtUwSOb5qMzLkGrNZOz/oxGtGjm6IHXGAa/a8kbRsnMq/BISp9e7T1t/b5wGw47JAd/ilsSm1Twln70w0rbouCRyXGNMghV7mU6EIeUQ3iLgOUHSqi2gix24Aq84F49QD2sA5GRNBKmPkeEq+k/sekdtiNX+gtfyT5zCazEeGaoPJMzhRJIz9fxhiyKulR4="
 
 script:
 - ./gradlew check
+- ./gradlew sonarcube
 #- ./gradlew jacocoTestReport
 #- sonar-scanner
 
