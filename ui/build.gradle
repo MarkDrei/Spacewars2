@@ -1,4 +1,3 @@
-
 plugins {
     id 'java'
     id "application"
@@ -6,6 +5,10 @@ plugins {
 
 repositories {
     mavenCentral()
+}
+
+application {
+    mainClass = 'de.rkable.spaceTCG.display.Main'
 }
 
 
@@ -18,7 +21,7 @@ dependencies {
     testImplementation ('org.junit.jupiter:junit-jupiter')
 }
 
-application {
-  mainClass = "de.rkable.spaceTCG.display.Main"
-}
+//application {
+//  mainClass = "de.rkable.spaceTCG.display.Main"
+//}
 
