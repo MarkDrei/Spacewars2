@@ -1,2 +1,2 @@
-include ':core'
-project(':core').projectDir = new File(settingsDir, '../core')
+include ':application'
+project(':application').projectDir = new File(settingsDir, '../application')

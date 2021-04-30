@@ -1,13 +1,16 @@
 package de.rkable.spaceTCG;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.rkable.spaceTCG.card.gameStats.change.DamageAppliedToOpponent;
 import de.rkable.spaceTCG.display.DeckDisplay;
 import de.rkable.spaceTCG.display.FightDisplay;
 import de.rkable.spaceTCG.display.FightDisplayBuilder;
 
 public class Fight {
 
+	private List<FightEventListener> listeners = new ArrayList<>();
 	private Ship player;
 	private Ship opponent;
 	private GameDeck deck;
@@ -47,6 +50,26 @@ public class Fight {
 
 	public List<Card> getDrawnCards() {
 		return deck.getDrawnCards();
+	}
+
+	public void play(Card card) {
+		List<GameStatChange> changes = card.play(() -> display());
+		for(GameStatChange change : changes) {
+			if (change instanceof DamageAppliedToOpponent) {
+				DamageAppliedToOpponent damage = (DamageAppliedToOpponent) change;
+				opponent.process(damage);
+			}
+		}
+		deck.discard(card);
+		deck.drawCard();
+		
+		for (FightEventListener listener : listeners) {
+			listener.cardPlayed(card, changes);
+		}
+	}
+
+	public void addFightEventListener(FightEventListener fightEventListener) {
+		listeners.add(fightEventListener);
 	}
 
 }

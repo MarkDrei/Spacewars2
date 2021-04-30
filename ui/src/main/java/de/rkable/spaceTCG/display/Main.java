@@ -19,7 +19,8 @@ public class Main {
 		shell.open();
 		
 		Fight testFight = SpaceTcgMain.getTestFight();
-		new FightComposite(shell, testFight);
+		FightComposite fightComposite = new FightComposite(shell, testFight);
+		
 		shell.setLayout(new FillLayout());
 		shell.layout();
 		

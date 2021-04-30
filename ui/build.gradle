@@ -15,7 +15,7 @@ application {
 sourceCompatibility = 1.11
 
 dependencies {
-    implementation project(':core')
+    implementation project(':domain')
     implementation ('org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.+')
     testImplementation (platform('org.junit:junit-bom:5+'))
     testImplementation ('org.junit.jupiter:junit-jupiter')

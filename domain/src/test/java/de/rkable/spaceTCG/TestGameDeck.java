@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class TestGameDeck {
 	
@@ -27,12 +28,7 @@ public class TestGameDeck {
 	}
 
 	private Card getDummyCard() {
-		return new Card() {
-			@Override
-			public String getName() {
-				return "";
-			}
-		};
+		return Mockito.mock(Card.class);
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package de.rkable.spaceTCG;
 
+import de.rkable.spaceTCG.card.gameStats.change.DamageAppliedToOpponent;
 import de.rkable.spaceTCG.display.ShipDisplayBuilder;
 
 public class Ship {
@@ -16,6 +17,10 @@ public class Ship {
 
 	public void display(ShipDisplayBuilder builder) {
 		builder.setHull(hull);
+	}
+
+	public void process(DamageAppliedToOpponent damage) {
+		hull = damage.getRemainingOpponentHealth();
 	}
 
 }
