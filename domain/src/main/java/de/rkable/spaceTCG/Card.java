@@ -13,5 +13,5 @@ public interface Card {
 	 * @param gameStats The current state of the game
 	 * @return a ordered list of changes to the game
 	 */
-	public List<GameStatChange> play(GameStats gameStats);
+	public List<GameStateChange> play(GameStats gameStats);
 }

@@ -3,7 +3,6 @@ package de.rkable.spaceTCG;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +19,12 @@ import de.rkable.spaceTCG.card.BasicLaser;
  */
 public class TestHandOf4Cards {
 	
-	private GameDeck gameDeck;
+	private FightDeck gameDeck;
 	private HandOf4Cards hand;
 	
 	@BeforeEach
 	public void setupFight() {
-		gameDeck = mock(GameDeck.class);
+		gameDeck = mock(FightDeck.class);
 		when(gameDeck.drawCard()).thenAnswer(new Answer<Card>() {
 
 			@Override
@@ -34,6 +33,11 @@ public class TestHandOf4Cards {
 			}
 		});
 		hand = new HandOf4Cards(gameDeck);
+	}
+	
+	@Test
+	public void constructor_copiesTheDeck() {
+		
 	}
 	
 	@Test

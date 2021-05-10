@@ -20,11 +20,15 @@ public final class FightDisplay {
 	public final ShipDisplay player;
 	public final ShipDisplay opponent;
 	public final DeckDisplay deckDisplay;
+	public final int maxEnergy;
+	public final int energy;
 	
-	FightDisplay(ShipDisplay player, ShipDisplay opponent, DeckDisplay deckDisplay) {
+	public FightDisplay(ShipDisplay player, ShipDisplay opponent, DeckDisplay deckDisplay, int maxEnergy, int energy) {
 		this.player = player;
 		this.opponent = opponent;
 		this.deckDisplay = deckDisplay;
+		this.maxEnergy = maxEnergy;
+		this.energy = energy;
 	}
 	
 	

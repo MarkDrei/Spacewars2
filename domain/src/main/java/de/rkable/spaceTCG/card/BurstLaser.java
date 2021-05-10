@@ -8,29 +8,21 @@ import de.rkable.spaceTCG.GameStateChange;
 import de.rkable.spaceTCG.GameStats;
 import de.rkable.spaceTCG.gameStats.change.DamageAppliedToOpponent;
 
-public class BasicLaser implements Card {
-	
-	private String name = "Laser";
-	private int baseDamage = 3;
-	
-	public BasicLaser() {
-		this("Laser", 3);
-	}
-	
-	public BasicLaser(String name, int baseDamage) {
-		this.name = name;
-		this.baseDamage = baseDamage;
-	}
+public class BurstLaser implements Card {
 
+	private int baseDamage = 1;
 
 	@Override
 	public String getName() {
-		return name;
+		return "Burst Laser";
 	}
 
 	@Override
 	public List<GameStateChange> play(GameStats gameStats) {
-		return Arrays.asList(new DamageAppliedToOpponent(baseDamage));
+		return Arrays.asList(
+				new DamageAppliedToOpponent(baseDamage),
+				new DamageAppliedToOpponent(baseDamage),
+				new DamageAppliedToOpponent(baseDamage));
 	}
 
 }

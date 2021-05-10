@@ -3,26 +3,29 @@ package de.rkable.spaceTCG;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.rkable.spaceTCG.card.gameStats.change.DamageAppliedToOpponent;
 import de.rkable.spaceTCG.display.DeckDisplay;
 import de.rkable.spaceTCG.display.FightDisplay;
 import de.rkable.spaceTCG.display.FightDisplayBuilder;
+import de.rkable.spaceTCG.player.Player;
 
 public class Fight {
+	
+	private final static int MAX_ENERGY = 3;
 
+	private int playerEnergy = MAX_ENERGY;
 	private List<FightEventListener> listeners = new ArrayList<>();
-	private Ship player;
-	private Ship opponent;
-	private GameDeck deck;
-
-	public Fight(Ship player, Ship opponent, GameDeck deck) {
+	private Player player;
+	private Opponent opponent;
+	private HandOf4Cards hand;
+	
+	public Fight(Player player, Opponent opponent) {
+		this(player, opponent, new FightDeck(player.getDeck()));
+	}
+	
+	Fight(Player player, Opponent opponent, FightDeck fightDeck) {
 		this.player = player;
 		this.opponent = opponent;
-		this.deck = deck;
-		deck.drawCard();
-		deck.drawCard();
-		deck.drawCard();
-		deck.drawCard();
+		hand = new HandOf4Cards(fightDeck);
 	}
 
 	public boolean hasUserLost() {
@@ -30,46 +33,96 @@ public class Fight {
 	}
 
 	public boolean hasUserWon() {
-		return !opponent.isAlive();
+		return !opponent.getShip().isAlive();
 	}
 
 	public FightDisplay display() {
 		FightDisplayBuilder builder = new FightDisplayBuilder();
-		player.display(builder.player());
-		opponent.display(builder.opponent());
+		player.getShip().display(builder.player());
+		opponent.getShip().display(builder.opponent());
 		
 		builder.setDeckDisplay(new DeckDisplay(
-				deck.getDrawnCards().get(0),
-				deck.getDrawnCards().get(1),
-				deck.getDrawnCards().get(2),
-				deck.getDrawnCards().get(3)
+				hand.getDrawnCards().get(0),
+				hand.getDrawnCards().get(1),
+				hand.getDrawnCards().get(2),
+				hand.getDrawnCards().get(3)
 				));
+		builder.setEnergy(playerEnergy);
+		builder.setMaxEnergy(MAX_ENERGY);
 		
 		return builder.build();
 	}
 
 	public List<Card> getDrawnCards() {
-		return deck.getDrawnCards();
+		return hand.getDrawnCards();
 	}
 
 	public void play(Card card) {
-		List<GameStatChange> changes = card.play(() -> display());
-		for(GameStatChange change : changes) {
-			if (change instanceof DamageAppliedToOpponent) {
-				DamageAppliedToOpponent damage = (DamageAppliedToOpponent) change;
-				opponent.process(damage);
-			}
+		if (playerEnergy <= 0) {
+			throw new RuntimeException("Cannot play a card without energy");
 		}
-		deck.discard(card);
-		deck.drawCard();
+		playerEnergy--;
+		List<GameStateChange> changes = card.play(() -> display());
+		hand.discardAndDrawCard(card);
 		
-		for (FightEventListener listener : listeners) {
-			listener.cardPlayed(card, changes);
+		List<GameStateChange> appliedChanges = processChanges(changes);
+		
+		// inform listeners
+		for (FightEventListener listener : new ArrayList<>(listeners)) {
+			listener.cardPlayed(card, appliedChanges);
+			if (!opponent.isAlive()) {
+				listener.victory();
+			}
 		}
 	}
 
 	public void addFightEventListener(FightEventListener fightEventListener) {
 		listeners.add(fightEventListener);
+	}
+
+	public void removeFightEventListener(FightEventListener fightEventListener) {
+		listeners.remove(fightEventListener);
+	}
+
+	public void endTurn() {
+		List<GameStateChange> changes = opponent.performNextAction(() -> display());
+		List<GameStateChange> appliedChanges = processChanges(changes);
+		for (FightEventListener listener : new ArrayList<>(listeners)) {
+			listener.opponentPlayed(appliedChanges);
+			if (!player.isAlive()) {
+				listener.defeat();
+			} else if (!opponent.isAlive()) {
+				listener.victory();
+			}
+		}
+		hand.discardAllAndDrawNew();
+		playerEnergy = MAX_ENERGY;
+	}
+
+	private List<GameStateChange> processChanges(List<GameStateChange> changes) {
+		
+		List<GameStateChange> appliedChanges = new ArrayList<>();
+		for (GameStateChange change : changes) {
+			appliedChanges.add(change);
+			player.process(change);
+			if (!player.isAlive()) {
+				break;
+			}
+			opponent.process(change);
+			if (!opponent.isAlive()) {
+				break;
+			}
+		}
+
+		return appliedChanges;
+	}
+
+	public int getMaxEnergy() {
+		return 3;
+	}
+
+	public int getEnergy() {
+		return playerEnergy;
 	}
 
 }

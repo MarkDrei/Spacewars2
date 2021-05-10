@@ -12,4 +12,12 @@ public class TestSpaceTcgMain {
 		assertNotNull(fight);
 		assertNotNull(fight.display().deckDisplay.card1);
 	}
+
+	@Test
+	public void getTestGame() {
+		Game game = SpaceTcgMain.getTestGame();
+		assertNotNull(game);
+
+	}
+
 }

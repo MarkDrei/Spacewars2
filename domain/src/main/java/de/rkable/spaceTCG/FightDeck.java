@@ -5,15 +5,25 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.rkable.spaceTCG.player.PlayerDeck;
+
 /**
- * A {@link GameDeck} is the deck during a single game / combat. It has piles and is alterable. 
+ * A {@link FightDeck} is the deck during a single game / combat. It has piles and is alterable. 
  *
  */
-public class GameDeck {
+public class FightDeck {
 	
 	private final List<Card> drawPile = new ArrayList<>();
 	private final List<Card> discardPile = new ArrayList<>();
 	private final List<Card> drawnCards = new LinkedList<>();
+
+	public FightDeck(PlayerDeck playerDeck) {
+		discardPile.addAll(playerDeck.getAllCards());
+	}
+
+	public FightDeck() {
+		// nop
+	}
 
 	public void addCardToDiscardPile(Card card) {
 		discardPile.add(card);

@@ -5,14 +5,17 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import de.rkable.spaceTCG.Card;
 import de.rkable.spaceTCG.Fight;
 import de.rkable.spaceTCG.FightEventListener;
-import de.rkable.spaceTCG.GameStatChange;
+import de.rkable.spaceTCG.GameStateChange;
 
 public class FightComposite extends Composite implements FightEventListener {
 
@@ -20,10 +23,12 @@ public class FightComposite extends Composite implements FightEventListener {
 	
 	private Label opponentHull;
 	private Label playerHull;
+	private Label energy;
 	private Label card1;
 	private Label card2;
 	private Label card3;
 	private Label card4;
+
 
 	public FightComposite(Composite parent, Fight testFight) {
 		super(parent, SWT.NONE);
@@ -35,6 +40,8 @@ public class FightComposite extends Composite implements FightEventListener {
 		
 		playerHull = new Label(this, SWT.NONE);
 		
+		energy = new Label(this, SWT.NONE);
+		
 		Label cards = new Label(this, SWT.NONE);
 		cards.setText("Cards: ");
 		
@@ -45,25 +52,44 @@ public class FightComposite extends Composite implements FightEventListener {
 		
 		testFight.addFightEventListener(this);
 		
-		addMouseListeners(testFight);
+		addMouseListenersForCards(testFight);
+		
+		Composite buttonArea = new Composite(this, SWT.NONE);
+		buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
+		Button endTurn = new Button(buttonArea, SWT.PUSH);
+		endTurn.setText("End Turn");
+		endTurn.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fight.endTurn();
+				updateDisplay();
+			}
+		});
 		
 		updateDisplay();
 	}
 	
 	@Override
-	public void cardPlayed(Card card, List<GameStatChange> changes) {
+	public void cardPlayed(Card card, List<GameStateChange> changes) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Event [\n");
 		sb.append("  played card: "+ card.getName() + "\n");
-		for (GameStatChange change : changes) {
+		for (GameStateChange change : changes) {
 			sb.append("  Change: " + change + "\n");
 		}
 		sb.append("]\n");
 		System.out.println(sb.toString());
 		updateDisplay();
 	}
+	
+	@Override
+	public void dispose() {
+		fight.removeFightEventListener(this);
+		super.dispose();
+	}
 
-	private void addMouseListeners(Fight testFight) {
+	private void addMouseListenersForCards(Fight testFight) {
 		card1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -100,6 +126,7 @@ public class FightComposite extends Composite implements FightEventListener {
 	private void updateDisplay() {
 		
 		FightDisplay display = fight.display();
+		energy.setText("Energy: " + display.energy + "/" + display.maxEnergy);
 		card1.setText("Card: " + display.deckDisplay.card1.getName());
 		card2.setText("Card: " + display.deckDisplay.card2.getName());
 		card3.setText("Card: " + display.deckDisplay.card3.getName());
@@ -107,6 +134,11 @@ public class FightComposite extends Composite implements FightEventListener {
 		opponentHull.setText("Oppponent Hull: " + display.opponent.hull);
 		playerHull.setText("Player Hull: " + display.player.hull);
 		
+	}
+
+	@Override
+	public void victory() {
+		// ignore
 	}
 
 }

@@ -3,17 +3,19 @@ package de.rkable.spaceTCG;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Wrapper around a deck which ensures that after discarding a card, the new card
+ * is at the position of the old one.
+ *
+ */
 public class HandOf4Cards {
 
-	private GameDeck deck;
+	private FightDeck deck;
 	private Card[] drawnCards = new Card[4];
 
-	public HandOf4Cards(GameDeck gameDeck) {
+	public HandOf4Cards(FightDeck gameDeck) {
 		this.deck = gameDeck;
-		drawnCards[0] = deck.drawCard();
-		drawnCards[1] = deck.drawCard();
-		drawnCards[2] = deck.drawCard();
-		drawnCards[3] = deck.drawCard();
+		drawNewCards();
 	}
 
 	public List<Card> getDrawnCards() {
@@ -30,6 +32,21 @@ public class HandOf4Cards {
 		}
 		throw new RuntimeException("Card has not been drawn before, cannot discard it");
 		
+	}
+
+	public void discardAllAndDrawNew() {
+		deck.discard(drawnCards[0]);
+		deck.discard(drawnCards[1]);
+		deck.discard(drawnCards[2]);
+		deck.discard(drawnCards[3]);
+		drawNewCards();
+	}
+	
+	private void drawNewCards() {
+		drawnCards[0] = deck.drawCard();
+		drawnCards[1] = deck.drawCard();
+		drawnCards[2] = deck.drawCard();
+		drawnCards[3] = deck.drawCard();
 	}
 
 }

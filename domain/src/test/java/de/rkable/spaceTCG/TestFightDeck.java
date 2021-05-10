@@ -1,7 +1,10 @@
 package de.rkable.spaceTCG;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,18 +13,28 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class TestGameDeck {
+import de.rkable.spaceTCG.player.PlayerDeck;
+
+public class TestFightDeck {
+	
+	@Test
+	public void constructorFromPlayerDeck() {
+		PlayerDeck playerDeck = mock(PlayerDeck.class);
+		when(playerDeck.getAllCards()).thenReturn(Arrays.asList(mock(Card.class), mock(Card.class)));
+		FightDeck deck = new FightDeck(playerDeck);
+		assertEquals(2, deck.getDiscardPileSize());
+	}
 	
 	@Test
 	public void getPileSizes_onEmptyDeck_isZero() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		assertEquals(0, deck.getDrawPileSize());
 		assertEquals(0, deck.getDiscardPileSize());
 	}
 	
 	@Test
 	public void getDrawPileSize_givesSize() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		assertEquals(0, deck.getDrawPileSize());
 		assertEquals(1, deck.getDiscardPileSize());
@@ -33,13 +46,13 @@ public class TestGameDeck {
 	
 	@Test
 	public void drawCard_onEmptyDeck_throws() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		assertThrows(RuntimeException.class, () -> deck.drawCard());
 	}
 
 	@Test
 	public void drawCard_onDeckWithOneCard_givesCard() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		Card card = getDummyCard();
 		deck.addCardToDiscardPile(card);
 		Card drawnCard = deck.drawCard();
@@ -48,7 +61,7 @@ public class TestGameDeck {
 	
 	@Test
 	public void drawCard_threeTimesOnDeckWithOneCard_throws() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		deck.addCardToDiscardPile(getDummyCard());
 		deck.drawCard();
@@ -58,13 +71,13 @@ public class TestGameDeck {
 	
 	@Test
 	public void discardCard_forCardWhichIsNotDrawn_throws() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		assertThrows(RuntimeException.class, () -> deck.discard(getDummyCard()));
 	}
 	
 	@Test
 	public void discardCard_allowsToDrawCardAgain() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		Card drawnCard = deck.drawCard();
 		deck.discard(drawnCard);
@@ -73,7 +86,7 @@ public class TestGameDeck {
 	
 	@Test
 	public void discardCard_twice_throws() {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		Card drawnCard = deck.drawCard();
 		deck.discard(drawnCard);
@@ -83,7 +96,7 @@ public class TestGameDeck {
 	@Nested
 	@DisplayName("Given a deck with one cards")
 	public class OneCard {
-		GameDeck deck = new GameDeck();
+		FightDeck deck = new FightDeck();
 		Card card1 = getDummyCard();
 		
 		@BeforeEach

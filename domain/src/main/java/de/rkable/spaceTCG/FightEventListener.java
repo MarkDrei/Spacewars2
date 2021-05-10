@@ -4,5 +4,36 @@ import java.util.List;
 
 public interface FightEventListener {
 
-	void cardPlayed(Card card, List<GameStatChange> changes);
+	/**
+	 * Event when a card is played
+	 * 
+	 * @param card    The card that was played
+	 * @param changes a list of changes that happen due to the played card
+	 */
+	default void cardPlayed(Card card, List<GameStateChange> changes) {
+		// default to do nothing
+	}
+
+	/**
+	 * Event when the player wins the battle
+	 */
+	default void victory() {
+		// default to do nothing
+	}
+
+	/**
+	 * Event when the player loses the battle
+	 */
+	default void defeat() {
+		// default to do nothing
+	}
+
+	/**
+	 * A turn of by the opponent with changes to the game state
+	 * 
+	 * @param changes a list of changes that happen due to the opponent turn
+	 */
+	default void opponentPlayed(List<GameStateChange> changes) {
+		// default to do nothing
+	}
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import de.rkable.spaceTCG.display.FightDisplay.ShipDisplay;
 import de.rkable.spaceTCG.display.ShipDisplayBuilder;
+import de.rkable.spaceTCG.gameStats.change.ShipDamage;
 
 public class TestShip {
 	
@@ -29,6 +30,13 @@ public class TestShip {
 		new Ship(42).display(builder);
 		ShipDisplay ship = builder.build();
 		assertEquals(42, ship.hull);
+	}
+	
+	@Test
+	public void process_ShipDamage() {
+		Ship ship = new Ship(1);
+		ship.process(new ShipDamage(3));
+		assertEquals(-2, ship.getHull());
 	}
 
 }

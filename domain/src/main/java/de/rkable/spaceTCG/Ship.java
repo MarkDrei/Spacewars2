@@ -1,7 +1,7 @@
 package de.rkable.spaceTCG;
 
-import de.rkable.spaceTCG.card.gameStats.change.DamageAppliedToOpponent;
 import de.rkable.spaceTCG.display.ShipDisplayBuilder;
+import de.rkable.spaceTCG.gameStats.change.ShipDamage;
 
 public class Ship {
 	
@@ -19,8 +19,14 @@ public class Ship {
 		builder.setHull(hull);
 	}
 
-	public void process(DamageAppliedToOpponent damage) {
-		hull = damage.getRemainingOpponentHealth();
+	public void process(GameStateChange stateChange) {
+		if (stateChange instanceof ShipDamage) {
+			hull -= ((ShipDamage) stateChange).getDamage();
+		}
+	}
+	
+	int getHull() {
+		return hull;
 	}
 
 }

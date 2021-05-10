@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.rkable.spaceTCG.GameStatChange;
+import de.rkable.spaceTCG.GameStateChange;
 import de.rkable.spaceTCG.GameStats;
-import de.rkable.spaceTCG.card.gameStats.change.DamageAppliedToOpponent;
 import de.rkable.spaceTCG.display.FightDisplayBuilder;
+import de.rkable.spaceTCG.gameStats.change.DamageAppliedToOpponent;
 
 public class TestBasicLaser {
 	
@@ -30,14 +30,13 @@ public class TestBasicLaser {
 		when(gameStats.getFightDisplay()).thenReturn(fightDisplayBuilder.build());
 		
 		// execute
-		List<GameStatChange> changes = laser.play(gameStats);
+		List<GameStateChange> changes = laser.play(gameStats);
 		
 		// verify
 		assertEquals(1, changes.size());
-		GameStatChange change1 = changes.get(0);
+		GameStateChange change1 = changes.get(0);
 		DamageAppliedToOpponent damage = (DamageAppliedToOpponent) change1;
-		assertEquals(3, damage.getDamageValue());
-		assertEquals(2, damage.getRemainingOpponentHealth());
+		assertEquals(3, damage.getShipDamage().getDamage());
 	}
 
 }
