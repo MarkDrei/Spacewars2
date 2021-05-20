@@ -31,13 +31,13 @@ public class SpaceTcgMain {
 	
 	private static Player getDefaultPlayer() {
 		PlayerDeck gameDeck = new PlayerDeck(
-				new BasicLaser("Laser 1", 1),
-				new BasicLaser("Laser 2", 2),
-				new BasicLaser("Laser 3", 3),
-				new BasicLaser("Laser 4", 4),
+				new BasicLaser("Laser 1", 10, 1),
+				new BasicLaser("Laser 2", 10, 2),
+				new BasicLaser("Laser 3", 10, 3),
+				new BasicLaser("Laser 4", 10, 4),
 				new BurstLaser());
 		
-		Ship playerShip = new Ship(50);
+		Ship playerShip = new Ship(20, 50);
 		return new Player(playerShip, gameDeck);
 	}
 	

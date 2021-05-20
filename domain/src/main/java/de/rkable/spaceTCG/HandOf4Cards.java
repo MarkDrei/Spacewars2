@@ -22,7 +22,7 @@ public class HandOf4Cards {
 		return Arrays.asList(drawnCards);
 	}
 
-	public void discardAndDrawCard(Card cardToDiscard) {
+	public void discardAndDrawCard(Card cardToDiscard) throws IllegalUserOperation {
 		for (int i = 0; i < drawnCards.length; i++) {
 			if (drawnCards[i] == cardToDiscard) {
 				deck.discard(cardToDiscard);
@@ -35,10 +35,15 @@ public class HandOf4Cards {
 	}
 
 	public void discardAllAndDrawNew() {
-		deck.discard(drawnCards[0]);
-		deck.discard(drawnCards[1]);
-		deck.discard(drawnCards[2]);
-		deck.discard(drawnCards[3]);
+		try {
+			deck.discard(drawnCards[0]);
+			deck.discard(drawnCards[1]);
+			deck.discard(drawnCards[2]);
+			deck.discard(drawnCards[3]);
+		} catch (IllegalUserOperation ex) {
+			System.err.println(ex);
+			throw new RuntimeException("Implementation error.");
+		}
 		drawNewCards();
 	}
 	

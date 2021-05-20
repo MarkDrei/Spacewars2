@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import de.rkable.spaceTCG.Game;
+import de.rkable.spaceTCG.IllegalUserOperation;
 import de.rkable.spaceTCG.map.Waypoint;
 import de.rkable.spaceTCG.map.WorldMap;
 
@@ -66,7 +67,12 @@ public class WorldMapComposite extends Composite {
 		waypointLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				game.visit(waypointToAdd);
+				try {
+					game.visit(waypointToAdd);
+				} catch (IllegalUserOperation e1) {
+					System.err.println("Cannot visit this waypoint");
+					e1.printStackTrace();
+				}
 			}
 		});
 		

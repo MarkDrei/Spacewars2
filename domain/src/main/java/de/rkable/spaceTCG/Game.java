@@ -32,9 +32,9 @@ public class Game implements FightEventListener {
 		return player;
 	}
 
-	public void visit(Waypoint waypoint) {
+	public void visit(Waypoint waypoint) throws IllegalUserOperation {
 		if (!worldMap.isReachable(waypoint)) {
-			throw new RuntimeException("Waypoint cannot be visited as it is not reachable from current position.");
+			throw new IllegalUserOperation("Waypoint cannot be visited as it is not reachable from current position.");
 		}
 
 		worldMap.travel(waypoint);

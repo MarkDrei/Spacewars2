@@ -76,7 +76,7 @@ public class TestGame {
 	public void visit_whenWaypointIsNotReachable_throws() {
 		when(worldMap.isReachable(any())).thenReturn(false);
 		
-		assertThrows(RuntimeException.class, () -> game.visit(mock(Waypoint.class)));
+		assertThrows(IllegalUserOperation.class, () -> game.visit(mock(Waypoint.class)));
 	}
 	
 	@Nested
@@ -92,7 +92,7 @@ public class TestGame {
 		
 		@SuppressWarnings("boxing")
 		@Test
-		public void visit_travelsOnMap() {
+		public void visit_travelsOnMap() throws IllegalUserOperation {
 			game.setWorldMap(worldMap);
 			when(worldMap.isReachable(any())).thenReturn(true);
 			
@@ -104,9 +104,10 @@ public class TestGame {
 		
 		/**
 		 * This is more a component test style
+		 * @throws IllegalUserOperation 
 		 */
 		@Test
-		public void visit_whenWaypointHasFight_initiatesTheFight() {
+		public void visit_whenWaypointHasFight_initiatesTheFight() throws IllegalUserOperation {
 			Waypoint waypointMock = new Waypoint(new VisitOpponent(game, mock(Opponent.class)));
 			Waypoint start = new Waypoint(waypointMock);
 			game.setWorldMap(new WorldMap(start));

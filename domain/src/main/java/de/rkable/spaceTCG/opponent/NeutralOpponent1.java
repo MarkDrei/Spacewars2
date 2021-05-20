@@ -11,12 +11,12 @@ import de.rkable.spaceTCG.gameStats.change.DamageAppliedToPlayer;
 public class NeutralOpponent1 extends OpponentBase {
 	
 	public NeutralOpponent1() {
-		super(new Ship(10));
+		super(new Ship(10, 10));
 	}
 
 	@Override
 	public List<GameStateChange> performNextAction(GameStats gameStats) {
-		return Arrays.asList(new DamageAppliedToPlayer(2));
+		return Arrays.asList(new DamageAppliedToPlayer(5, 2));
 	}
 
 }

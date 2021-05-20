@@ -7,13 +7,19 @@ import de.rkable.spaceTCG.GameStateChange;
  */
 public class ShipDamage implements GameStateChange {
 
-	private int damage;
+	private int shieldDamage;
+	private int hullDamage;
 
-	public ShipDamage(int damage) {
-		this.damage = damage;
+	public ShipDamage(int shieldDamage, int hullDamage) {
+		this.shieldDamage = shieldDamage;
+		this.hullDamage = hullDamage;
 	}
 	
-	public int getDamage() {
-		return damage;
+	public int getShieldDamage() {
+		return shieldDamage;
+	}
+	
+	public int getHullDamage() {
+		return hullDamage;
 	}
 }

@@ -57,9 +57,9 @@ public class Fight {
 		return hand.getDrawnCards();
 	}
 
-	public void play(Card card) {
+	public void play(Card card) throws IllegalUserOperation {
 		if (playerEnergy <= 0) {
-			throw new RuntimeException("Cannot play a card without energy");
+			throw new IllegalUserOperation("Cannot play a card without energy");
 		}
 		playerEnergy--;
 		List<GameStateChange> changes = card.play(() -> display());

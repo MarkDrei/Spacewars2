@@ -7,22 +7,23 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class VictoryScreen extends Composite {
+public class DefeatScreen extends Composite {
 
-	public VictoryScreen(Composite parent, GameStateListener backToMapListener) {
+	public DefeatScreen(Composite parent, GameStateListener gameStateListener) {
 		super(parent, SWT.NONE);
+		
 		setLayout(new FillLayout(SWT.VERTICAL));
 		
 		Label label = new Label(this, SWT.NONE);
-		label.setText("Victory!");
+		label.setText("Defeat!");
 		label.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				backToMapListener.goBackToMap();
+				gameStateListener.startOver();
 			}
 		});
+	
 	}
-
 
 }

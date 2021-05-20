@@ -36,9 +36,6 @@ public class TestFight {
 		opponentMock = mock(Opponent.class);
 		when(opponentMock.getShip()).thenReturn(new Ship(2));
 		gameDeckMock = new PlayerDeck(new BasicLaser(), new BasicLaser(), new BasicLaser(), new BasicLaser());
-//		gameDeckMock = mock(PlayerDeck.class);
-//		when(gameDeckMock.getAllCards())
-//			.thenReturn(Arrays.asList(new BasicLaser(), new BasicLaser(), new BasicLaser(), new BasicLaser()));
 		player = spy(new Player(new Ship(1), gameDeckMock));
 		fight = new Fight(player, opponentMock);
 		
@@ -79,7 +76,7 @@ public class TestFight {
 	
 	@SuppressWarnings("boxing")
 	@Test
-	public void playCard_withMultipleEffects_appliesOnlyEffectsUntilVictory() {
+	public void playCard_withMultipleEffects_appliesOnlyEffectsUntilVictory() throws IllegalUserOperation {
 		gameDeckMock = new PlayerDeck(new BurstLaser(), new BurstLaser(), new BurstLaser(), new BurstLaser());
 		fight = new Fight(new Player(new Ship(2), gameDeckMock), opponentMock);
 		fight.addFightEventListener(eventListenerMock);
@@ -210,7 +207,7 @@ public class TestFight {
 		}
 		
 		@Test
-		public void playCard_playsTheCard() {
+		public void playCard_playsTheCard() throws IllegalUserOperation {
 			Card card = fight.getDrawnCards().get(0);
 			
 			// execute
@@ -222,7 +219,7 @@ public class TestFight {
 		}
 		
 		@Test
-		public void playCard_twoTimes_accumulatesUpdates() {
+		public void playCard_twoTimes_accumulatesUpdates() throws IllegalUserOperation {
 			// execute
 			fight.play(fight.getDrawnCards().get(0));
 			fight.play(fight.getDrawnCards().get(0));
@@ -234,7 +231,7 @@ public class TestFight {
 		
 		@SuppressWarnings("boxing")
 		@Test
-		public void playCard_untilVictory_givesNotification() {
+		public void playCard_untilVictory_givesNotification() throws IllegalUserOperation {
 			when(opponentMock.isAlive()).thenReturn(true);
 			
 			// execute
@@ -246,7 +243,7 @@ public class TestFight {
 		}
 		
 		@Test
-		public void addFightEventListener_whenCardIsPlayed_getsInformed() {
+		public void addFightEventListener_whenCardIsPlayed_getsInformed() throws IllegalUserOperation {
 			class Listener implements FightEventListener {
 				
 				Card listenerCard = null;
@@ -274,7 +271,8 @@ public class TestFight {
 		}
 		
 		@Test
-		public void removeFightEventListener_withMultipleListener_isSaveAgainstConcurrentModifications() {
+		public void removeFightEventListener_withMultipleListener_isSaveAgainstConcurrentModifications()
+				throws IllegalUserOperation {
 			class DeregisterUponEvent implements FightEventListener {
 				@Override
 				public void cardPlayed(Card card, List<GameStateChange> changes) {
@@ -291,35 +289,35 @@ public class TestFight {
 		
 		
 		@Test
-		public void endTurn_discardsHandAndDrawsNewCards() {
+		public void endTurn_discardsHandAndDrawsNewCards() throws IllegalUserOperation {
 			fight.endTurn();
 			verify(fightDeckMock, times(4)).discard(any());
 		}
 		
 		@Test
-		public void getEnergy_afterCardWasPlayed_isDecreased() {
+		public void getEnergy_afterCardWasPlayed_isDecreased() throws IllegalUserOperation {
 			fight.play(fight.getDrawnCards().get(0));
 			assertEquals(3, fight.getMaxEnergy());
 			assertEquals(2, fight.getEnergy());
 		}
 		
 		@Test
-		public void getEnergy_afterCardWasPlayed_isDecreasedOnDisplay() {
+		public void getEnergy_afterCardWasPlayed_isDecreasedOnDisplay() throws IllegalUserOperation {
 			fight.play(fight.getDrawnCards().get(0));
 			assertEquals(3, fight.display().maxEnergy);
 			assertEquals(2, fight.display().energy);
 		}
 		
 		@Test
-		public void playCard_withNoEnergy_throws() {
+		public void playCard_withNoEnergy_throws() throws IllegalUserOperation {
 			fight.play(fight.getDrawnCards().get(0));
 			fight.play(fight.getDrawnCards().get(0));
 			fight.play(fight.getDrawnCards().get(0));
-			assertThrows(RuntimeException.class, () -> fight.play(fight.getDrawnCards().get(0)));
+			assertThrows(IllegalUserOperation.class, () -> fight.play(fight.getDrawnCards().get(0)));
 		}
 		
 		@Test
-		public void endTurn_resetsTheEnergy() {
+		public void endTurn_resetsTheEnergy() throws IllegalUserOperation {
 			fight.play(fight.getDrawnCards().get(0));
 			fight.play(fight.getDrawnCards().get(0));
 			fight.endTurn();

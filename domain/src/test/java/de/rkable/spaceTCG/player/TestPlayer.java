@@ -40,7 +40,7 @@ public class TestPlayer {
 	
 	@Test
 	public void process_withPlayerDamage_forwardsProcessingToShip() {
-		player.process(new DamageAppliedToPlayer(2));
+		player.process(new DamageAppliedToPlayer(5, 2));
 		verify(shipMock).process(any(ShipDamage.class));
 	}
 

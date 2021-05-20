@@ -36,18 +36,13 @@ public class TestHandOf4Cards {
 	}
 	
 	@Test
-	public void constructor_copiesTheDeck() {
-		
-	}
-	
-	@Test
 	public void initialHand_has4Cards() {
 		List<Card> cards = hand.getDrawnCards();
 		assertEquals(4, cards.size());
 	}
 	
 	@Test
-	public void discardAndDrawCard__replacesCardAtRightIndex() {
+	public void discardAndDrawCard__replacesCardAtRightIndex() throws IllegalUserOperation {
 		Card card0 = hand.getDrawnCards().get(0);
 		Card card1 = hand.getDrawnCards().get(1);
 		Card card2 = hand.getDrawnCards().get(2);

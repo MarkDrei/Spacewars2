@@ -1,2 +1,2 @@
-include ':application'
-project(':application').projectDir = new File(settingsDir, '../application')
+include ':domain'
+project(':domain').projectDir = new File(settingsDir, '../domain')

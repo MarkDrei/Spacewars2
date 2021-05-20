@@ -48,9 +48,9 @@ public class FightDeck {
 		discardPile.clear();
 	}
 
-	public void discard(Card discardedCard) {
+	public void discard(Card discardedCard) throws IllegalUserOperation {
 		if (!drawnCards.contains(discardedCard)) {
-			throw new RuntimeException("Card cannot be discarded as it was not drawn before");
+			throw new IllegalUserOperation("Card cannot be discarded as it was not drawn before");
 		}
 		drawnCards.remove(discardedCard);
 		discardPile.add(discardedCard);

@@ -1,6 +1,7 @@
 package de.rkable.spaceTCG.opponent;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TestNeutralOpponent1 {
 			
 			@Override
 			public FightDisplay getFightDisplay() {
-				return new FightDisplay(new ShipDisplay(10), null, null, 0, 0);
+				return new FightDisplay(mock(ShipDisplay.class), null, null, 0, 0);
 			}
 		};
 		List<GameStateChange> changes = opponent.performNextAction(gameStats);
@@ -42,14 +43,16 @@ public class TestNeutralOpponent1 {
 		assertTrue(change instanceof DamageAppliedToPlayer);
 		DamageAppliedToPlayer damage = (DamageAppliedToPlayer) change;
 		
-		assertEquals(2, damage.getShipDamage().getDamage());
+		assertEquals(2, damage.getShipDamage().getHullDamage());
+		assertEquals(5, damage.getShipDamage().getShieldDamage());
 	}
 	
 	@Test
 	public void process_withDamage_appliesTheDamage() {
-		opponent.process(new DamageAppliedToOpponent(2));
+		opponent.process(new DamageAppliedToOpponent(20, 4));
 		ShipDisplayBuilder displayBuilder = new ShipDisplayBuilder();
 		opponent.getShip().display(displayBuilder);
+		assertEquals(0, displayBuilder.build().shield);
 		assertEquals(8, displayBuilder.build().hull);
 	}
 

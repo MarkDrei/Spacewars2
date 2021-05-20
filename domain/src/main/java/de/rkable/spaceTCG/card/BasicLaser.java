@@ -11,17 +11,18 @@ import de.rkable.spaceTCG.gameStats.change.DamageAppliedToOpponent;
 public class BasicLaser implements Card {
 	
 	private String name = "Laser";
-	private int baseDamage = 3;
+	private int shieldDamage;
+	private int hullDamage;
 	
 	public BasicLaser() {
-		this("Laser", 3);
+		this("Laser", 10, 3);
 	}
 	
-	public BasicLaser(String name, int baseDamage) {
+	public BasicLaser(String name, int shieldDamage, int hullDamage) {
 		this.name = name;
-		this.baseDamage = baseDamage;
+		this.shieldDamage = shieldDamage;
+		this.hullDamage = hullDamage;
 	}
-
 
 	@Override
 	public String getName() {
@@ -30,7 +31,14 @@ public class BasicLaser implements Card {
 
 	@Override
 	public List<GameStateChange> play(GameStats gameStats) {
-		return Arrays.asList(new DamageAppliedToOpponent(baseDamage));
+		return Arrays.asList(new DamageAppliedToOpponent(shieldDamage, hullDamage));
+	}
+	
+	@Override
+	public String getDescription() {
+		return "\"" + getName() + "\" fires a laser beam, causing "
+				+ shieldDamage + " damage to shields and "
+				+ hullDamage + " damage to the hull.";
 	}
 
 }

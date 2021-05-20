@@ -27,16 +27,56 @@ public class TestShip {
 	@Test
 	public void display_fillsInData() {
 		ShipDisplayBuilder builder = new ShipDisplayBuilder();
-		new Ship(42).display(builder);
+		new Ship(42, 23).display(builder);
 		ShipDisplay ship = builder.build();
-		assertEquals(42, ship.hull);
+		assertEquals(42, ship.maxShield);
+		assertEquals(42, ship.shield);
+		assertEquals(23, ship.maxHull);
+		assertEquals(23, ship.hull);
 	}
 	
 	@Test
-	public void process_ShipDamage() {
+	public void process_hullDamageWithNoShield_deductsFromHull() {
 		Ship ship = new Ship(1);
-		ship.process(new ShipDamage(3));
+		ship.process(new ShipDamage(0, 3));
+		assertEquals(1, ship.getMaxHull());
 		assertEquals(-2, ship.getHull());
+	}
+	
+	@Test
+	public void process_shieldDamageWithShield_deductsFromShield() {
+		Ship ship = new Ship(10, 10);
+		ship.process(new ShipDamage(5, 0));
+		assertEquals(10, ship.getMaxShield());
+		assertEquals(5, ship.getShield());
+		ship.process(new ShipDamage(5, 0));
+		assertEquals(0, ship.getShield());
+		ship.process(new ShipDamage(5, 0));
+		assertEquals(0, ship.getShield());
+	}
+	
+	@Test
+	public void process_hullDamageWhenShipHasShield_deductsNothing() {
+		Ship ship = new Ship(10, 10);
+		ship.process(new ShipDamage(0, 5));
+		assertEquals(10, ship.getHull());
+		assertEquals(10, ship.getShield());
+	}
+	
+	@Test
+	public void process_bothDamageTypesPartially_deductsPartially() {
+		Ship ship = new Ship(5, 10);
+		ship.process(new ShipDamage(10, 8));
+		assertEquals(0, ship.getShield());
+		assertEquals(6, ship.getHull());
+	}
+	
+	@Test
+	public void process_bothDamageTypesPartially_deductsPartially2() {
+		Ship ship = new Ship(5, 10);
+		ship.process(new ShipDamage(7, 7));
+		assertEquals(0, ship.getShield());
+		assertEquals(8, ship.getHull());
 	}
 
 }

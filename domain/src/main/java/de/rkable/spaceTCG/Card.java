@@ -4,7 +4,13 @@ import java.util.List;
 
 public interface Card {
 
+	/**
+	 * The name of the card to be displayed
+	 * @return
+	 */
 	String getName();
+	
+	String getDescription();
 	
 	/**
 	 * This card is played. Given the current state of the game, calculate the changes

@@ -3,7 +3,6 @@ package de.rkable.spaceTCG;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,11 +71,11 @@ public class TestFightDeck {
 	@Test
 	public void discardCard_forCardWhichIsNotDrawn_throws() {
 		FightDeck deck = new FightDeck();
-		assertThrows(RuntimeException.class, () -> deck.discard(getDummyCard()));
+		assertThrows(IllegalUserOperation.class, () -> deck.discard(getDummyCard()));
 	}
 	
 	@Test
-	public void discardCard_allowsToDrawCardAgain() {
+	public void discardCard_allowsToDrawCardAgain() throws IllegalUserOperation {
 		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		Card drawnCard = deck.drawCard();
@@ -85,12 +84,12 @@ public class TestFightDeck {
 	}
 	
 	@Test
-	public void discardCard_twice_throws() {
+	public void discardCard_twice_throws() throws IllegalUserOperation {
 		FightDeck deck = new FightDeck();
 		deck.addCardToDiscardPile(getDummyCard());
 		Card drawnCard = deck.drawCard();
 		deck.discard(drawnCard);
-		assertThrows(RuntimeException.class, () -> deck.discard(drawnCard));
+		assertThrows(IllegalUserOperation.class, () -> deck.discard(drawnCard));
 	}
 	
 	@Nested
@@ -105,7 +104,7 @@ public class TestFightDeck {
 		}
 		
 		@Test
-		public void discardCard_leadsToCorrectDiscardPileSize() {
+		public void discardCard_leadsToCorrectDiscardPileSize() throws IllegalUserOperation {
 			assertEquals(1, deck.getDiscardPileSize());
 			Card drawCard = deck.drawCard();
 			assertEquals(0, deck.getDiscardPileSize());
@@ -125,7 +124,7 @@ public class TestFightDeck {
 			}
 			
 			@Test
-			public void drawingCards_eventuallyShufflesInTheDiscardPile() {
+			public void drawingCards_eventuallyShufflesInTheDiscardPile() throws IllegalUserOperation {
 				Card drawnCard = deck.drawCard();
 				assertEquals(1, deck.getDrawPileSize());
 				deck.discard(drawnCard);

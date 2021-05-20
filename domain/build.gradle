@@ -13,13 +13,12 @@ sourceCompatibility = 1.11
 
 dependencies {
 
-//    // https://mvnrepository.com/artifact/com.google.inject/guice
-//    implementation group: 'com.google.inject', name: 'guice', version: '3.0'
-//    // https://mvnrepository.com/artifact/org.mockito/mockito-all
-    implementation group: 'org.mockito', name: 'mockito-all', version: '1.10+'
+    testImplementation platform('org.junit:junit-bom:5+')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     
-    testImplementation (platform('org.junit:junit-bom:5+'))
-    testImplementation ('org.junit.jupiter:junit-jupiter')
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation 'org.mockito:mockito-core:3.10.0'
 }
 
 test {

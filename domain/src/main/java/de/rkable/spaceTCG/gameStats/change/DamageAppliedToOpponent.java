@@ -5,8 +5,8 @@ package de.rkable.spaceTCG.gameStats.change;
  */
 public class DamageAppliedToOpponent extends DamageAppliedToShip {
 	
-	public DamageAppliedToOpponent(int damage) {
-		super(damage);
+	public DamageAppliedToOpponent(int shieldDamage, int hullDamage) {
+		super(shieldDamage, hullDamage);
 	}
 
 }

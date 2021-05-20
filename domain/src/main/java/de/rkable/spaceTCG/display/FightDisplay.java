@@ -10,11 +10,17 @@ public final class FightDisplay {
 	
 	public final static class ShipDisplay {
 		
-		public ShipDisplay(int hull) {
+		public ShipDisplay(int shield, int maxShield, int hull, int maxHull) {
+			this.shield = shield;
+			this.maxShield = maxShield;
 			this.hull = hull;
+			this.maxHull = maxHull;
 		}
 		
 		public final int hull;
+		public final int maxShield;
+		public final int shield;
+		public final int maxHull;
 	}
 	
 	public final ShipDisplay player;

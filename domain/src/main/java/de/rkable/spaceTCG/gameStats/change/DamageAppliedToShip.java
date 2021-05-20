@@ -6,8 +6,8 @@ public abstract class DamageAppliedToShip implements GameStateChange {
 	
 	private final ShipDamage shipDamage;
 
-	public DamageAppliedToShip(int damage) {
-		this.shipDamage = new ShipDamage(damage);
+	public DamageAppliedToShip(int shieldDamage, int hullDamage) {
+		this.shipDamage = new ShipDamage(shieldDamage, hullDamage);
 	}
 
 	public ShipDamage getShipDamage() {

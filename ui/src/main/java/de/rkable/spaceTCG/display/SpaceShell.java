@@ -13,10 +13,9 @@ import de.rkable.spaceTCG.FightEventListener;
 import de.rkable.spaceTCG.Game;
 import de.rkable.spaceTCG.GameListener;
 import de.rkable.spaceTCG.GameStateChange;
-import de.rkable.spaceTCG.SpaceTcgMain;
 import de.rkable.spaceTCG.map.WorldMap;
 
-public class SpaceShell implements FightEventListener, GameListener, BackToMapListener {
+public class SpaceShell implements FightEventListener, GameListener, GameStateListener {
 	
 	private Composite previousComposite;
 	private Shell shell;
@@ -25,18 +24,12 @@ public class SpaceShell implements FightEventListener, GameListener, BackToMapLi
 	public SpaceShell(Display display) {
 		shell = new Shell(display);
 		shell.setSize(300, 600);
-		shell.setLocation(100, 100);
+		shell.setLocation(800, 300);
 		shell.setText("Space Mock UI");
 		shell.open();
 		shell.setLayout(new FillLayout());
 		
-//		Fight testFight = SpaceTcgMain.getTestFight();
-//		previousComposite = new FightComposite(shell, testFight);
-//		testFight.addFightEventListener(this);
-		
-		game = SpaceTcgMain.getTestGame();
-		game.addGameListener(this);
-		goBackToMap();
+		previousComposite = new NewGameComposite(shell, this, this);
 		
 		shell.layout();
 	}
@@ -48,33 +41,55 @@ public class SpaceShell implements FightEventListener, GameListener, BackToMapLi
 	@Override
 	public void cardPlayed(Card card, List<GameStateChange> changes) {
 		// ignore
-		
 	}
 
 	@Override
 	public void victory() {
-		previousComposite.dispose();
-		previousComposite = new VictoryScreen(shell, this);
-		shell.layout();
+		updateDisplayContent(new VictoryScreen(shell, this));
+	}
+	
+	@Override
+	public void defeat() {
+		updateDisplayContent(new DefeatScreen(shell, this));
 	}
 
 	@Override
 	public void fightInitiated(Fight fight) {
 		System.out.println("Fight initiated: " + fight);
-		previousComposite.dispose();
-		previousComposite = new FightComposite(shell, fight);
 		fight.addFightEventListener(this);
-		shell.layout();
+		
+		updateDisplayContent(new FightComposite(shell, fight));
 	}
 
 	@Override
 	public void goBackToMap() {
+		if (game == null) {
+			// there is no game or map (dummy fight situation
+			startOver();
+			return;
+		}
+		WorldMap worldMap = game.getWorldMap();
+		updateDisplayContent(new WorldMapComposite(shell, game, worldMap));
+	}
+
+	private void updateDisplayContent(Composite newContent) {
 		if(previousComposite != null) {
 			previousComposite.dispose();
 		}
-		WorldMap worldMap = game.getWorldMap();
-		previousComposite = new WorldMapComposite(shell, game, worldMap);
+		previousComposite = newContent;
 		shell.layout();
+	}
+
+	@Override
+	public void newGame(Game newGame) {
+		this.game = newGame;
+		newGame.addGameListener(this);
+		goBackToMap();
+	}
+
+	@Override
+	public void startOver() {
+		updateDisplayContent(new NewGameComposite(shell, this, this));
 	}
 
 }
