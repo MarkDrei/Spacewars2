@@ -1,9 +1,7 @@
 package de.rkable.spaceTCG.display;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -28,30 +26,22 @@ public class WorldMapComposite extends Composite {
 		this.game = game;
 		setLayout(new FillLayout(SWT.VERTICAL));
 		
-		Set<Waypoint> allWaypoints = worldMap.getAllWaypoints();
-		
-		Map<Waypoint, String> waypointNames = new HashMap<>();
-		int waypointNumber = 1;
-		for (Waypoint waypoint : allWaypoints) {
-			waypointNames.put(waypoint, "Waypoint " + waypointNumber++);
-		}
-		
 		Set<Waypoint> reachableWaypoints = worldMap.getReachableWaypoints();
 		Waypoint currentWaypoint = worldMap.getCurrentWaypoint();
 		
 		List<Waypoint> alreadyAddedWaypoints = new ArrayList<>();
-		addWaypoint(worldMap.getStart(), alreadyAddedWaypoints, currentWaypoint, reachableWaypoints, waypointNames);
+		addWaypoint(worldMap.getStart(), alreadyAddedWaypoints, currentWaypoint, reachableWaypoints);
 	}
 
 	private void addWaypoint(Waypoint waypointToAdd, List<Waypoint> alreadyAddedWaypoints, Waypoint currentWaypoint,
-			Set<Waypoint> reachableWaypoints, Map<Waypoint, String> waypointNames) {
+			Set<Waypoint> reachableWaypoints) {
 		
 		
 		if (alreadyAddedWaypoints.contains(waypointToAdd)) { 
 			return;
 		}
 		alreadyAddedWaypoints.add(waypointToAdd);
-		String waypointDescription = waypointNames.get(waypointToAdd);
+		String waypointDescription = waypointToAdd.getName();
 		if (currentWaypoint.equals(waypointToAdd)) {
 			waypointDescription += " (current)";
 		}
@@ -60,7 +50,7 @@ public class WorldMapComposite extends Composite {
 		}
 		String reachableWaypointsNames = "";
 		for (Waypoint next : waypointToAdd.getReachableWaypoints()) {
-			reachableWaypointsNames += "\n  -> " + waypointNames.get(next);
+			reachableWaypointsNames += "\n  -> " + next.getName();
 		}
 		Label waypointLabel = new Label(this, SWT.NONE);
 		waypointLabel.setText(waypointDescription + reachableWaypointsNames); 
@@ -77,7 +67,7 @@ public class WorldMapComposite extends Composite {
 		});
 		
 		for (Waypoint next : waypointToAdd.getReachableWaypoints()) {
-			addWaypoint(next, alreadyAddedWaypoints, currentWaypoint, reachableWaypoints, waypointNames);
+			addWaypoint(next, alreadyAddedWaypoints, currentWaypoint, reachableWaypoints);
 		}
 	}
 

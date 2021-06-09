@@ -7,14 +7,14 @@ import de.rkable.spaceTCG.Opponent;
 
 import static org.mockito.Mockito.*;
 
-public class TestVisitOpponent {
+public class TestVisitOpponentAction {
 	
 	@Test
-	public void test() {
+	public void triggerVisit_initiatesFight() {
 		Game game = mock(Game.class);
 		Opponent opponent = mock(Opponent.class);
 		
-		VisitOpponent visitOpponent = new VisitOpponent(game, opponent);
+		VisitOpponentAction visitOpponent = new VisitOpponentAction(game, opponent);
 		visitOpponent.triggerVisit();
 		verify(game).fightStarted(opponent);
 	}

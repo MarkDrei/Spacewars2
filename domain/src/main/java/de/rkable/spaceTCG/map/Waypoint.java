@@ -20,19 +20,18 @@ public class Waypoint {
 	
 	private Set<Waypoint> reachableWaypoints = new HashSet<>();
 	private Optional<VisitAction> visitAction = Optional.empty();
-
-	public Waypoint() {
-		// no op
-	}
+	private String name;
 	
-	public Waypoint(VisitAction visitAction, Waypoint... targets) {
+	public Waypoint(String name, VisitAction visitAction, Waypoint... targets) {
+		this.name = name;
 		this.visitAction = Optional.of(visitAction);
 		reachableWaypoints.addAll(Arrays.asList(targets));
 	}
 	
-	public Waypoint(Waypoint... targets) {
-		this(() -> { /* null visit action */}, targets);
+	public Waypoint(String name, Waypoint... targets) {
+		this(name, () -> { /* null visit action */}, targets);
 	}
+
 
 	public Set<Waypoint> getReachableWaypoints() {
 		return reachableWaypoints;
@@ -43,6 +42,10 @@ public class Waypoint {
 		if (visitAction.isPresent()) {
 			visitAction.get().triggerVisit();
 		}
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 }

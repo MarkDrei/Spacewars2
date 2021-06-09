@@ -21,4 +21,8 @@ public class PlayerDeck {
 	public List<Card> getAllCards() {
 		return new ArrayList<>(cards);
 	}
+	
+	public void addCard(Card card) {
+		cards.add(card);
+	}
 }

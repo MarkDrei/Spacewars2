@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import de.rkable.spaceTCG.card.BasicLaser;
+import de.rkable.spaceTCG.card.Laser;
 
 public class TestFightDisplayBuilder {
 	
@@ -32,14 +32,15 @@ public class TestFightDisplayBuilder {
 	}
 
 	@Test
-	public void sdf() {
+	public void display_containsCards() {
 		FightDisplayBuilder builder = new FightDisplayBuilder();
-		builder.setDeckDisplay(new DeckDisplay(new BasicLaser(), new BasicLaser(), new BasicLaser(), new BasicLaser()));
+		builder.setDeckDisplay(new DeckDisplay(Laser.createTier1(), Laser.createTier1(),
+				Laser.createTier2(), Laser.createTier1()));
 		FightDisplay display = builder.build();
-		assertEquals("Laser", display.deckDisplay.card1.getName());
-		assertEquals("Laser", display.deckDisplay.card2.getName());
-		assertEquals("Laser", display.deckDisplay.card3.getName());
-		assertEquals("Laser", display.deckDisplay.card4.getName());
+		assertEquals("Laser Mk1", display.deckDisplay.card1.getName());
+		assertEquals("Laser Mk1", display.deckDisplay.card2.getName());
+		assertEquals("Laser Mk2", display.deckDisplay.card3.getName());
+		assertEquals("Laser Mk1", display.deckDisplay.card4.getName());
 	}
 
 

@@ -3,6 +3,10 @@ package de.rkable.spaceTCG;
 import java.util.List;
 
 public interface Card {
+	
+	interface CardFactory {
+		Card createCard();
+	}
 
 	/**
 	 * The name of the card to be displayed

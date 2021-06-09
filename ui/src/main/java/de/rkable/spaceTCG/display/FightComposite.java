@@ -172,9 +172,4 @@ public class FightComposite extends Composite implements FightEventListener {
 		}
 	}
 
-	@Override
-	public void victory() {
-		// ignore
-	}
-
 }

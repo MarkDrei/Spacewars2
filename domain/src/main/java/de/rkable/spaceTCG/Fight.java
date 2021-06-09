@@ -17,15 +17,17 @@ public class Fight {
 	private Player player;
 	private Opponent opponent;
 	private HandOf4Cards hand;
+	private IRewardProvider rewardProvider;
 	
-	public Fight(Player player, Opponent opponent) {
-		this(player, opponent, new FightDeck(player.getDeck()));
+	public Fight(Player player, Opponent opponent, IRewardProvider rewardProvider) {
+		this(player, opponent, new FightDeck(player.getDeck()), rewardProvider);
 	}
 	
-	Fight(Player player, Opponent opponent, FightDeck fightDeck) {
+	Fight(Player player, Opponent opponent, FightDeck fightDeck, IRewardProvider rewardProvider) {
 		this.player = player;
 		this.opponent = opponent;
 		hand = new HandOf4Cards(fightDeck);
+		this.rewardProvider = rewardProvider;
 	}
 
 	public boolean hasUserLost() {
@@ -68,11 +70,20 @@ public class Fight {
 		List<GameStateChange> appliedChanges = processChanges(changes);
 		
 		// inform listeners
+
 		for (FightEventListener listener : new ArrayList<>(listeners)) {
 			listener.cardPlayed(card, appliedChanges);
-			if (!opponent.isAlive()) {
-				listener.victory();
-			}
+		}
+		if (!opponent.isAlive()) {
+			informAboutVictory();
+		}
+		
+	}
+
+	private void informAboutVictory() {
+		List<Card> rewardsToChoseFrom = rewardProvider.getRewardsToChoseFrom();
+		for (FightEventListener listener : new ArrayList<>(listeners)) {
+			listener.victory(rewardsToChoseFrom);
 		}
 	}
 
@@ -87,14 +98,23 @@ public class Fight {
 	public void endTurn() {
 		List<GameStateChange> changes = opponent.performNextAction(() -> display());
 		List<GameStateChange> appliedChanges = processChanges(changes);
+		
 		for (FightEventListener listener : new ArrayList<>(listeners)) {
 			listener.opponentPlayed(appliedChanges);
-			if (!player.isAlive()) {
-				listener.defeat();
-			} else if (!opponent.isAlive()) {
-				listener.victory();
-			}
 		}
+		
+		// defeat ?
+		if (!player.isAlive()) {
+			for (FightEventListener listener : new ArrayList<>(listeners)) {
+				listener.defeat();
+			}
+			return;
+		}
+		
+		if (!opponent.isAlive()) {
+			informAboutVictory();
+		}
+		
 		hand.discardAllAndDrawNew();
 		playerEnergy = MAX_ENERGY;
 	}

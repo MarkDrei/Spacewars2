@@ -4,12 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.rkable.spaceTCG.map.VisitOpponent;
+import de.rkable.spaceTCG.map.VisitOpponentAction;
 import de.rkable.spaceTCG.map.Waypoint;
 import de.rkable.spaceTCG.map.WorldMap;
 import de.rkable.spaceTCG.player.Player;
@@ -42,14 +45,27 @@ public class TestGame {
 		assertSame(player, game.getPlayer());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
-	public void addGameListener() {
-		game.addGameListener(new GameListener() {
-			@Override
-			public void fightInitiated(Fight fight) {
-				// nop
-			}
-		});
+	public void addGameListener_and_removeGameListener() {
+		GameListener gameListener1 = mock(GameListener.class);
+		GameListener gameListener2 = mock(GameListener.class);
+		
+		game.addGameListener(gameListener1);
+		game.addGameListener(gameListener2);
+		
+		game.fightStarted(mock(Opponent.class));
+		
+		verify(gameListener1).fightInitiated(any());
+		game.removeGameListener(gameListener2);
+		verify(gameListener2).fightInitiated(any());
+		
+		reset(gameListener1, gameListener2);
+		
+		game.victory(mock(List.class));
+		game.fightStarted(mock(Opponent.class));
+		verify(gameListener1).fightInitiated(any());
+		verifyNoInteractions(gameListener2);
 	}
 	
 	@Test
@@ -71,6 +87,35 @@ public class TestGame {
 		verify(fight).addFightEventListener(game);
 	}
 	
+	@Test
+	public void addCardFromReward_throws() {
+		assertThrows(IllegalUserOperation.class, () -> game.pickRewardCard(mock(Card.class)));
+	}
+	
+	@Test
+	public void addCardFromReward_afterVictoryWhenCardIsNotAReward_throws() {
+		Card card1 = mock(Card.class);
+		Card card2 = mock(Card.class);
+		game.victory(Arrays.asList(card1));
+		PlayerDeck playerDeck = mock(PlayerDeck.class);
+		when(player.getDeck()).thenReturn(playerDeck);
+		
+		assertThrows(IllegalUserOperation.class, () -> game.pickRewardCard(card2));
+	}
+	
+	@Test
+	public void addCardFromReward_afterVictory_addsCard() throws IllegalUserOperation {
+		Card card = mock(Card.class);
+		game.victory(Arrays.asList(card));
+		PlayerDeck playerDeck = mock(PlayerDeck.class);
+		when(player.getDeck()).thenReturn(playerDeck);
+		
+		game.pickRewardCard(card);
+		
+		verify(player).getDeck();
+		verify(playerDeck).addCard(card);
+	}
+	
 	@SuppressWarnings("boxing")
 	@Test
 	public void visit_whenWaypointIsNotReachable_throws() {
@@ -78,6 +123,18 @@ public class TestGame {
 		
 		assertThrows(IllegalUserOperation.class, () -> game.visit(mock(Waypoint.class)));
 	}
+	
+	@Test
+	public void setWorldMap_triggersListeners() {
+		GameListener gameListener = mock(GameListener.class);
+		game.addGameListener(gameListener);
+		WorldMap worldMap2 = mock(WorldMap.class);
+		
+		game.setWorldMap(worldMap2);
+		
+		verify(gameListener).mapChanged(worldMap2);
+	}
+	
 	
 	@Nested
 	@DisplayName("with real player object")
@@ -108,8 +165,8 @@ public class TestGame {
 		 */
 		@Test
 		public void visit_whenWaypointHasFight_initiatesTheFight() throws IllegalUserOperation {
-			Waypoint waypointMock = new Waypoint(new VisitOpponent(game, mock(Opponent.class)));
-			Waypoint start = new Waypoint(waypointMock);
+			Waypoint waypointMock = new Waypoint("waypoint", new VisitOpponentAction(game, mock(Opponent.class)));
+			Waypoint start = new Waypoint("waypoint", waypointMock);
 			game.setWorldMap(new WorldMap(start));
 			GameListener gameListener = mock(GameListener.class);
 			game.addGameListener(gameListener);
@@ -138,10 +195,11 @@ public class TestGame {
 			assertThrows(RuntimeException.class, () -> game.fightStarted(mock(Opponent.class)));
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Test
 		public void fightStarted_afterPreviousFightHasFinished_works() {
 			game.fightStarted(mock(Opponent.class));
-			game.victory();
+			game.victory(mock(List.class));
 			game.fightStarted(mock(Opponent.class));
 		}
 	}

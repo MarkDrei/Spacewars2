@@ -12,8 +12,8 @@ public class TestWorldMap {
 	
 	@Test
 	public void getAllWaypoints_for2Points_findsAllWaypoints() {
-		Waypoint to = new Waypoint();
-		Waypoint from = new Waypoint(to);
+		Waypoint to = new Waypoint("waypoint");
+		Waypoint from = new Waypoint("waypoint", to);
 		WorldMap worldMap = new WorldMap(from);
 		Set<Waypoint> waypoints = worldMap.getAllWaypoints();
 		assertEquals(2, waypoints.size());
@@ -23,9 +23,9 @@ public class TestWorldMap {
 	
 	@Test
 	public void getAllWaypoints_for3Points_findsAllWaypoints() {
-		Waypoint c = new Waypoint();
-		Waypoint b = new Waypoint(c);
-		Waypoint a = new Waypoint(b);
+		Waypoint c = new Waypoint("waypoint");
+		Waypoint b = new Waypoint("waypoint", c);
+		Waypoint a = new Waypoint("waypoint", b);
 		WorldMap worldMap = new WorldMap(a);
 		Set<Waypoint> waypoints = worldMap.getAllWaypoints();
 		assertEquals(3, waypoints.size());
@@ -36,10 +36,10 @@ public class TestWorldMap {
 	
 	@Test
 	public void getAllWaypoints_forDiamond_findsAllWaypoints() {
-		Waypoint c = new Waypoint();
-		Waypoint b1 = new Waypoint(c);
-		Waypoint b2 = new Waypoint(c);
-		Waypoint a = new Waypoint(b1, b2);
+		Waypoint c = new Waypoint("waypoint");
+		Waypoint b1 = new Waypoint("waypoint", c);
+		Waypoint b2 = new Waypoint("waypoint", c);
+		Waypoint a = new Waypoint("waypoint", b1, b2);
 		WorldMap worldMap = new WorldMap(a);
 		Set<Waypoint> waypoints = worldMap.getAllWaypoints();
 		assertEquals(4, waypoints.size());
@@ -51,15 +51,15 @@ public class TestWorldMap {
 	
 	@Test
 	public void getCurrentWaypoint_givesCurrentWaypoint() {
-		Waypoint waypoint = new Waypoint();
+		Waypoint waypoint = new Waypoint("waypoint");
 		WorldMap worldMap = new WorldMap(waypoint);
 		assertEquals(waypoint, worldMap.getCurrentWaypoint());
 	}
 	
 	@Test
 	public void getCurrentWaypoint_afterTravel_givesNewCurrentWaypoint() {
-		Waypoint to = new Waypoint();
-		Waypoint from = new Waypoint(to);
+		Waypoint to = new Waypoint("waypoint");
+		Waypoint from = new Waypoint("waypoint", to);
 		WorldMap worldMap = new WorldMap(from);
 		worldMap.travel(to);
 		assertEquals(to, worldMap.getCurrentWaypoint());
@@ -75,9 +75,9 @@ public class TestWorldMap {
 		
 		@BeforeEach
 		public void setup() {
-			c = new Waypoint();
-			b = new Waypoint(c);
-			a = new Waypoint(b);
+			c = new Waypoint("waypoint");
+			b = new Waypoint("waypoint", c);
+			a = new Waypoint("waypoint", b);
 			worldMap = new WorldMap(a);
 		}
 		
@@ -112,6 +112,12 @@ public class TestWorldMap {
 			assertSame(a, worldMap.getStart());
 			worldMap.travel(b);
 			assertSame(a, worldMap.getStart());
+		}
+		
+		@Test
+		public void getMapLength_for3Levels_is3() {
+			// TODO 
+//			worldMap.getMapLength
 		}
 	}
 	

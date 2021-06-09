@@ -4,12 +4,12 @@ import de.rkable.spaceTCG.Game;
 import de.rkable.spaceTCG.Opponent;
 import de.rkable.spaceTCG.map.Waypoint.VisitAction;
 
-public class VisitOpponent implements VisitAction {
+public class VisitOpponentAction implements VisitAction {
 	
-	private Game game;
+	protected Game game;
 	private Opponent opponent;
 
-	public VisitOpponent(Game game, Opponent opponent) {
+	public VisitOpponentAction(Game game, Opponent opponent) {
 		this.game = game;
 		this.opponent = opponent;
 	}

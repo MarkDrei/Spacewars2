@@ -29,4 +29,16 @@ public class TestPlayerDeck {
 		assertTrue(cards.contains(card2));
 		assertTrue(cards.contains(card3));
 	}
+	
+	@Test
+	public void addCard() {
+		PlayerDeck playerDeck = new PlayerDeck(mock(Card.class), mock(Card.class));
+		playerDeck.addCard(mock(Card.class));
+		playerDeck.addCard(mock(Card.class));
+		assertEquals(4, playerDeck.getDeckSize());
+		playerDeck.addCard(mock(Card.class));
+		playerDeck.addCard(mock(Card.class));
+		assertEquals(6, playerDeck.getDeckSize());
+	}
+	
 }

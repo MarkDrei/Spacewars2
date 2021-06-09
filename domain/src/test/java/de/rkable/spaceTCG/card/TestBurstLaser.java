@@ -16,9 +16,9 @@ public class TestBurstLaser {
 	
 	@Test
 	public void getDescription() {
-		BurstLaser burstLaser = new BurstLaser();
+		BurstLaser burstLaser = BurstLaser.createTier1();
 		String description = burstLaser.getDescription();
-		assertThat("", description, containsString("\"Burst Laser\""));
+		assertThat("", description, containsString("\"Burst Laser Mk1\""));
 		assertThat("", description, containsString("3 laser beams"));
 		assertThat("", description, containsString("1 damage to the hull"));
 		assertThat("", description, containsString("3 damage to shields"));
@@ -26,7 +26,7 @@ public class TestBurstLaser {
 	
 	@Test
 	public void play_hasOneEffectPerBurstSize() {
-		BurstLaser burstLaser = new BurstLaser();
+		BurstLaser burstLaser = BurstLaser.createTier1();
 		List<GameStateChange> effects = burstLaser.play(mock(GameStats.class));
 		assertEquals(3, effects.size());
 	}

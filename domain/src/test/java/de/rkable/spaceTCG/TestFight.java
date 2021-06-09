@@ -16,7 +16,7 @@ import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import de.rkable.spaceTCG.card.BasicLaser;
+import de.rkable.spaceTCG.card.Laser;
 import de.rkable.spaceTCG.card.BurstLaser;
 import de.rkable.spaceTCG.display.FightDisplay;
 import de.rkable.spaceTCG.player.Player;
@@ -29,15 +29,17 @@ public class TestFight {
 	private PlayerDeck gameDeckMock;
 	private Player player;
 	private FightEventListener eventListenerMock;
+	private IRewardProvider rewardProviderMock;
 
 	@SuppressWarnings("boxing")
 	@BeforeEach
 	public void setup() {
 		opponentMock = mock(Opponent.class);
 		when(opponentMock.getShip()).thenReturn(new Ship(2));
-		gameDeckMock = new PlayerDeck(new BasicLaser(), new BasicLaser(), new BasicLaser(), new BasicLaser());
+		rewardProviderMock = mock(IRewardProvider.class);
+		gameDeckMock = new PlayerDeck(Laser.createTier1(), Laser.createTier1(), Laser.createTier1(), Laser.createTier1());
 		player = spy(new Player(new Ship(1), gameDeckMock));
-		fight = new Fight(player, opponentMock);
+		fight = new Fight(player, opponentMock, rewardProviderMock);
 		
 		when(opponentMock.isAlive()).thenReturn(true);
 		when(player.isAlive()).thenReturn(true);
@@ -53,7 +55,7 @@ public class TestFight {
 	
 	@Test
 	public void hasUserLost_whenShipIsNotAlive_isTrue() {
-		fight = new Fight(new Player(new Ship(0), gameDeckMock), opponentMock);
+		fight = new Fight(new Player(new Ship(0), gameDeckMock), opponentMock, rewardProviderMock);
 		assertTrue(fight.hasUserLost());
 	}
 	
@@ -77,8 +79,9 @@ public class TestFight {
 	@SuppressWarnings("boxing")
 	@Test
 	public void playCard_withMultipleEffects_appliesOnlyEffectsUntilVictory() throws IllegalUserOperation {
-		gameDeckMock = new PlayerDeck(new BurstLaser(), new BurstLaser(), new BurstLaser(), new BurstLaser());
-		fight = new Fight(new Player(new Ship(2), gameDeckMock), opponentMock);
+		gameDeckMock = new PlayerDeck(BurstLaser.createTier1(), BurstLaser.createTier1(), 
+				BurstLaser.createTier1(), BurstLaser.createTier1());
+		fight = new Fight(new Player(new Ship(2), gameDeckMock), opponentMock, rewardProviderMock);
 		fight.addFightEventListener(eventListenerMock);
 		when(player.isAlive()).thenReturn(true);
 		when(opponentMock.isAlive()).thenReturn(true, false);
@@ -90,7 +93,7 @@ public class TestFight {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		ArgumentCaptor<List<GameStateChange>> changes = ArgumentCaptor.forClass((Class) List.class);
 		verify(eventListenerMock, times(1)).cardPlayed(any(), changes.capture());
-		verify(eventListenerMock).victory();
+		verify(eventListenerMock).victory(any());
 		assertEquals(2, changes.getValue().size());
 	}
 	
@@ -150,7 +153,7 @@ public class TestFight {
 		inOrder.verify(player).process(stateChange1);
 		inOrder.verify(player, times(2)).isAlive();
 		verify(eventListenerMock).defeat();
-		verify(eventListenerMock, never()).victory();
+		verify(eventListenerMock, never()).victory(any());
 	}
 	
 	@SuppressWarnings("boxing")
@@ -172,7 +175,34 @@ public class TestFight {
 		inOrder.verify(player).isAlive();
 		inOrder.verify(opponentMock).process(stateChange1);
 		inOrder.verify(opponentMock).isAlive();
-		verify(eventListenerMock).victory();
+		verify(eventListenerMock).victory(any());
+	}
+	
+	@SuppressWarnings("boxing")
+	@Test
+	public void victory_providesRewards() {
+		GameStateChange stateChange1 = mock(GameStateChange.class);
+		when(opponentMock.performNextAction(any())).thenReturn(Arrays.asList(stateChange1));
+		when(opponentMock.isAlive()).thenReturn(false);
+		
+		fight.endTurn();
+		
+		verify(eventListenerMock).victory(any());
+		verify(rewardProviderMock).getRewardsToChoseFrom();
+	}
+	
+	@SuppressWarnings("boxing")
+	@Test
+	public void victory_with2Listenesr_creates1Reward() {
+		GameStateChange stateChange1 = mock(GameStateChange.class);
+		when(opponentMock.performNextAction(any())).thenReturn(Arrays.asList(stateChange1));
+		when(opponentMock.isAlive()).thenReturn(false);
+		fight.addFightEventListener(mock(FightEventListener.class));
+		
+		fight.endTurn();
+		
+		verify(eventListenerMock).victory(any());
+		verify(rewardProviderMock).getRewardsToChoseFrom();
 	}
 	
 	@Nested
@@ -188,13 +218,12 @@ public class TestFight {
 
 				@Override
 				public Card answer(InvocationOnMock invocation) throws Throwable {
-					return new BasicLaser();
+					return Laser.createTier1();
 				}
 			});
-//			player = new Player(new Ship(1), gameDeckMock);
 			
 			when(opponentMock.getShip()).thenReturn(new Ship(5));
-			fight = new Fight(player, opponentMock, fightDeckMock);
+			fight = new Fight(player, opponentMock, fightDeckMock, rewardProviderMock);
 			fight.addFightEventListener(eventListenerMock);
 		}
 		
@@ -239,7 +268,37 @@ public class TestFight {
 			when(opponentMock.isAlive()).thenReturn(false);
 			fight.play(fight.getDrawnCards().get(0));
 			
-			verify(eventListenerMock).victory();
+			verify(eventListenerMock).victory(any());
+		}
+		
+		@SuppressWarnings("boxing")
+		@Test
+		public void playCard_untilVictory_createsReward() throws IllegalUserOperation {
+			when(opponentMock.isAlive()).thenReturn(true);
+			
+			// execute
+			fight.play(fight.getDrawnCards().get(0));
+			when(opponentMock.isAlive()).thenReturn(false);
+			fight.play(fight.getDrawnCards().get(0));
+			
+			verify(eventListenerMock).victory(any());
+			verify(rewardProviderMock).getRewardsToChoseFrom();
+		}
+		
+		@SuppressWarnings("boxing")
+		@Test
+		public void playCard_untilVictoryWith2Listeners_creates1Reward() throws IllegalUserOperation {
+			when(opponentMock.isAlive()).thenReturn(true);
+			// add 2nd listener
+			fight.addFightEventListener(mock(FightEventListener.class));
+			
+			// execute
+			fight.play(fight.getDrawnCards().get(0));
+			when(opponentMock.isAlive()).thenReturn(false);
+			fight.play(fight.getDrawnCards().get(0));
+			
+			verify(eventListenerMock).victory(any());
+			verify(rewardProviderMock).getRewardsToChoseFrom();
 		}
 		
 		@Test
@@ -255,8 +314,6 @@ public class TestFight {
 					changes = changesListener;
 				}
 				
-				@Override
-				public void victory() { /* nop */ }
 			}
 			Listener listener = new Listener();
 			

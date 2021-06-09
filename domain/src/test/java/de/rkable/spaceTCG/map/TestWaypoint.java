@@ -13,11 +13,11 @@ public class TestWaypoint {
 
 	@Test
 	public void getReachableWaypoints_givesWaypoint() {
-		Waypoint to = new Waypoint();
+		Waypoint to = new Waypoint("waypoint");
 		Set<Waypoint> reachable = to.getReachableWaypoints();
 		assertEquals(0, reachable.size());
 		
-		Waypoint from = new Waypoint(to);
+		Waypoint from = new Waypoint("waypoint", to);
 		reachable = from.getReachableWaypoints();
 		assertEquals(1, reachable.size());
 		assertTrue(reachable.contains(to));
@@ -25,10 +25,10 @@ public class TestWaypoint {
 	
 	@Test
 	public void getReachableWaypoints_withToWaypoints_givesWaypoints() {
-		Waypoint to1 = new Waypoint();
-		Waypoint to2 = new Waypoint();
+		Waypoint to1 = new Waypoint("waypoint");
+		Waypoint to2 = new Waypoint("waypoint");
 		
-		Waypoint from = new Waypoint(to1, to2);
+		Waypoint from = new Waypoint("waypoint", to1, to2);
 		Set<Waypoint> reachable = from.getReachableWaypoints();
 		assertEquals(2, reachable.size());
 		assertTrue(reachable.contains(to1));
@@ -38,8 +38,15 @@ public class TestWaypoint {
 	@Test
 	public void visit_triggersEvent() {
 		VisitAction visitAction = mock(Waypoint.VisitAction.class);
-		Waypoint waypoint = new Waypoint(visitAction);
+		Waypoint waypoint = new Waypoint("waypoint", visitAction);
 		waypoint.visit();
 		verify(visitAction).triggerVisit();
 	}
+	
+	@Test
+	public void getName_givesName() {
+		assertEquals("name",  new Waypoint("name").getName());
+		assertEquals("name2", new Waypoint("name2").getName());
+	}
+	
 }

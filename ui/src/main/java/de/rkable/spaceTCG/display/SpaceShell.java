@@ -44,8 +44,8 @@ public class SpaceShell implements FightEventListener, GameListener, GameStateLi
 	}
 
 	@Override
-	public void victory() {
-		updateDisplayContent(new VictoryScreen(shell, this));
+	public void victory(List<Card> rewardOptions) {
+		updateDisplayContent(new VictoryScreen(shell, this, game, rewardOptions));
 	}
 	
 	@Override
@@ -90,6 +90,12 @@ public class SpaceShell implements FightEventListener, GameListener, GameStateLi
 	@Override
 	public void startOver() {
 		updateDisplayContent(new NewGameComposite(shell, this, this));
+	}
+
+	@Override
+	public void mapChanged(WorldMap map) {
+		// TODO not even needed?
+		
 	}
 
 }

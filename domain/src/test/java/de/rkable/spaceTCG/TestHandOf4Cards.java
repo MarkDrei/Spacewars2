@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import de.rkable.spaceTCG.card.BasicLaser;
+import de.rkable.spaceTCG.card.Laser;
 
 /**
  * Four cards, hold in a hand.
@@ -29,7 +29,7 @@ public class TestHandOf4Cards {
 
 			@Override
 			public Card answer(InvocationOnMock invocation) throws Throwable {
-				return new BasicLaser();
+				return Laser.createTier1();
 			}
 		});
 		hand = new HandOf4Cards(gameDeck);
@@ -57,7 +57,7 @@ public class TestHandOf4Cards {
 	
 	@Test
 	public void discardAndDrawCard_whenCardWasNeverDrawn_throws() {
-		assertThrows(RuntimeException.class, () -> hand.discardAndDrawCard(new BasicLaser()));
+		assertThrows(RuntimeException.class, () -> hand.discardAndDrawCard(Laser.createTier1()));
 	}
 
 }

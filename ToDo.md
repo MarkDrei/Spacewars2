@@ -14,3 +14,7 @@
 
 
 
+# Mockito
+use
+@ExtendWith(MockitoExtension.class)
+with @Mock and @InjectMocks

@@ -14,13 +14,13 @@ import de.rkable.spaceTCG.GameStats;
 import de.rkable.spaceTCG.display.FightDisplayBuilder;
 import de.rkable.spaceTCG.gameStats.change.DamageAppliedToOpponent;
 
-public class TestBasicLaser {
+public class TestLaser {
 	
-	private BasicLaser laser = new BasicLaser();
+	private Laser laser = Laser.createTier1();
 	
 	@Test
 	public void name() {
-		assertEquals("Laser", laser.getName());
+		assertEquals("Laser Mk1", laser.getName());
 	}
 	
 	@Test
@@ -38,16 +38,16 @@ public class TestBasicLaser {
 		assertEquals(1, changes.size());
 		GameStateChange change1 = changes.get(0);
 		DamageAppliedToOpponent damage = (DamageAppliedToOpponent) change1;
-		assertEquals(3, damage.getShipDamage().getHullDamage());
+		assertEquals(2, damage.getShipDamage().getHullDamage());
 	}
 	
 	@Test
 	public void getDescription() {
-		BasicLaser myLaser = new BasicLaser("My Laser", 13, 42);
+		Laser myLaser = Laser.createTier2();
 		String description = myLaser.getDescription();
-		assertThat("", description, containsString("My Laser"));
-		assertThat("", description, containsString("42 damage to the hull"));
-		assertThat("", description, containsString("13 damage to shields"));
+		assertThat("", description, containsString("Laser Mk2"));
+		assertThat("", description, containsString("3 damage to the hull"));
+		assertThat("", description, containsString("10 damage to shields"));
 	}
 
 }

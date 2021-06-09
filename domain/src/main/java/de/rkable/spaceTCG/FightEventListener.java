@@ -16,8 +16,9 @@ public interface FightEventListener {
 
 	/**
 	 * Event when the player wins the battle
+	 * @param rewardOptions 
 	 */
-	default void victory() {
+	default void victory(List<Card> rewardOptions) {
 		// default to do nothing
 	}
 
