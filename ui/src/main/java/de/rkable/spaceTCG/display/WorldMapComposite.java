@@ -1,7 +1,5 @@
 package de.rkable.spaceTCG.display;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -29,46 +27,45 @@ public class WorldMapComposite extends Composite {
 		Set<Waypoint> reachableWaypoints = worldMap.getReachableWaypoints();
 		Waypoint currentWaypoint = worldMap.getCurrentWaypoint();
 		
-		List<Waypoint> alreadyAddedWaypoints = new ArrayList<>();
-		addWaypoint(worldMap.getStart(), alreadyAddedWaypoints, currentWaypoint, reachableWaypoints);
+		for (int level = worldMap.getMapLength() - 1; level >= 0; level--) {
+			addMapLevel(worldMap.getWaypointsOnLevel(level), currentWaypoint, reachableWaypoints);
+		}
+		
 	}
 
-	private void addWaypoint(Waypoint waypointToAdd, List<Waypoint> alreadyAddedWaypoints, Waypoint currentWaypoint,
+	private void addMapLevel(Set<Waypoint> waypointsOnLevel, Waypoint currentWaypoint,
 			Set<Waypoint> reachableWaypoints) {
 		
+		Composite levelContainer = new Composite(this, SWT.NONE);
+		levelContainer.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		if (alreadyAddedWaypoints.contains(waypointToAdd)) { 
-			return;
-		}
-		alreadyAddedWaypoints.add(waypointToAdd);
-		String waypointDescription = waypointToAdd.getName();
-		if (currentWaypoint.equals(waypointToAdd)) {
-			waypointDescription += " (current)";
-		}
-		if (reachableWaypoints.contains(waypointToAdd)) {
-			waypointDescription += " (reachable)";
-		}
-		String reachableWaypointsNames = "";
-		for (Waypoint next : waypointToAdd.getReachableWaypoints()) {
-			reachableWaypointsNames += "\n  -> " + next.getName();
-		}
-		Label waypointLabel = new Label(this, SWT.NONE);
-		waypointLabel.setText(waypointDescription + reachableWaypointsNames); 
-		waypointLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				try {
-					game.visit(waypointToAdd);
-				} catch (IllegalUserOperation e1) {
-					System.err.println("Cannot visit this waypoint");
-					e1.printStackTrace();
-				}
+		for(Waypoint waypointToAdd : waypointsOnLevel) {
+			String waypointDescription = waypointToAdd.getName();
+			if (currentWaypoint.equals(waypointToAdd)) {
+				waypointDescription += "\n (current)";
 			}
-		});
-		
-		for (Waypoint next : waypointToAdd.getReachableWaypoints()) {
-			addWaypoint(next, alreadyAddedWaypoints, currentWaypoint, reachableWaypoints);
+			if (reachableWaypoints.contains(waypointToAdd)) {
+				waypointDescription += "\n (reachable)";
+			}
+			String reachableWaypointsNames = "";
+			for (Waypoint next : waypointToAdd.getReachableWaypoints()) {
+				reachableWaypointsNames += "\n  -> " + next.getName();
+			}
+			Label waypointLabel = new Label(levelContainer, SWT.NONE);
+			waypointLabel.setText(waypointDescription + reachableWaypointsNames); 
+			waypointLabel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					try {
+						game.visit(waypointToAdd);
+					} catch (IllegalUserOperation e1) {
+						System.err.println("Cannot visit this waypoint");
+						e1.printStackTrace();
+					}
+				}
+			});
 		}
+		
 	}
 
 }
