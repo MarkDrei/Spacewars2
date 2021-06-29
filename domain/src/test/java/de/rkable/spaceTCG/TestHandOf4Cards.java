@@ -29,7 +29,7 @@ public class TestHandOf4Cards {
 
 			@Override
 			public Card answer(InvocationOnMock invocation) throws Throwable {
-				return Laser.createTier1();
+				return Laser.FACTORY.createTier1();
 			}
 		});
 		hand = new HandOf4Cards(gameDeck);
@@ -57,7 +57,7 @@ public class TestHandOf4Cards {
 	
 	@Test
 	public void discardAndDrawCard_whenCardWasNeverDrawn_throws() {
-		assertThrows(RuntimeException.class, () -> hand.discardAndDrawCard(Laser.createTier1()));
+		assertThrows(RuntimeException.class, () -> hand.discardAndDrawCard(Laser.FACTORY.createTier1()));
 	}
 
 }

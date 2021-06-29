@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.rkable.spaceTCG.Card;
-import de.rkable.spaceTCG.Card.CardFactory;
+import de.rkable.spaceTCG.Card.CardSupplier;
 import de.rkable.spaceTCG.IRewardProvider;
 import de.rkable.spaceTCG.card.CardLibrary;
 
@@ -45,7 +45,7 @@ public class RandomCardsReward implements IRewardProvider {
 		return getRandomCard(library.getTier1Cards());
 	}
 
-	private Card getRandomCard(List<CardFactory> cardsToChooseFrom) {
+	private Card getRandomCard(List<CardSupplier> cardsToChooseFrom) {
 		return cardsToChooseFrom.get(random.nextInt(cardsToChooseFrom.size())).createCard();
 	}
 

@@ -1,7 +1,8 @@
 package de.rkable.spaceTCG;
 
 import de.rkable.spaceTCG.display.ShipDisplayBuilder;
-import de.rkable.spaceTCG.gameStats.change.ShipDamage;
+import de.rkable.spaceTCG.gameStats.change.DamageAppliedToShip;
+import de.rkable.spaceTCG.gameStats.change.RechargePlayerShield;
 
 public class Ship {
 	
@@ -37,8 +38,8 @@ public class Ship {
 	}
 
 	public void process(GameStateChange stateChange) {
-		if (stateChange instanceof ShipDamage) {
-			ShipDamage damage = (ShipDamage) stateChange;
+		if (stateChange instanceof DamageAppliedToShip) {
+			DamageAppliedToShip damage = (DamageAppliedToShip) stateChange;
 			
 			if (shield > 0 && damage.getShieldDamage() >= shield) {
 				double amountRemaining = 1 - ((double) shield / damage.getShieldDamage());
@@ -51,6 +52,9 @@ public class Ship {
 					hull -= damage.getHullDamage();
 				}
 			}
+		} else if (stateChange instanceof RechargePlayerShield) {
+			RechargePlayerShield recharge = (RechargePlayerShield) stateChange;
+			shield = Math.min(maxShield, recharge.getAmountToRecharge() + shield);
 		}
 	}
 	

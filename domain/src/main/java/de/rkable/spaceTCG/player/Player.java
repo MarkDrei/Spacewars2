@@ -3,6 +3,7 @@ package de.rkable.spaceTCG.player;
 import de.rkable.spaceTCG.GameStateChange;
 import de.rkable.spaceTCG.Ship;
 import de.rkable.spaceTCG.gameStats.change.DamageAppliedToPlayer;
+import de.rkable.spaceTCG.gameStats.change.RechargePlayerShield;
 
 public class Player {
 
@@ -16,7 +17,9 @@ public class Player {
 
 	public void process(GameStateChange gameStateChange) {
 		if (gameStateChange instanceof DamageAppliedToPlayer) {
-			ship.process(((DamageAppliedToPlayer) gameStateChange).getShipDamage());
+			ship.process(gameStateChange);
+		} else if (gameStateChange instanceof RechargePlayerShield) {
+			ship.process(gameStateChange); 
 		}
 	}
 	

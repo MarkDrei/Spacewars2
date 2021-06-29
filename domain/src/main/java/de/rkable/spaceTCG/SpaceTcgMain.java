@@ -66,17 +66,17 @@ public class SpaceTcgMain {
 	private static Player getDefaultPlayer() {
 		PlayerDeck gameDeck = new PlayerDeck(
 				// 7x
-				Laser.createTier1(),
-				Laser.createTier1(),
-				Laser.createTier1(),
-				Laser.createTier1(),
-				Laser.createTier1(),
-				Laser.createTier1(),
-				Laser.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(),
 				// 3x
-				BurstLaser.createTier1(),
-				BurstLaser.createTier1(),
-				BurstLaser.createTier1());
+				BurstLaser.FACTORY.createTier1(),
+				BurstLaser.FACTORY.createTier1(),
+				BurstLaser.FACTORY.createTier1());
 		
 		Ship playerShip = new Ship(20, 50);
 		return new Player(playerShip, gameDeck);

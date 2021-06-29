@@ -27,7 +27,7 @@ public abstract class OpponentBase implements Opponent {
 	@Override
 	public void process(GameStateChange stateChange) {
 		if (stateChange instanceof DamageAppliedToOpponent) {
-			ship.process(((DamageAppliedToOpponent) stateChange).getShipDamage());
+			ship.process(stateChange);
 		}
 
 	}

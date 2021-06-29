@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Card {
 	
-	interface CardFactory {
+	interface CardSupplier {
 		Card createCard();
 	}
 

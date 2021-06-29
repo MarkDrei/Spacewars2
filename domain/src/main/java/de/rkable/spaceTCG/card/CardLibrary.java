@@ -1,9 +1,9 @@
 package de.rkable.spaceTCG.card;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import de.rkable.spaceTCG.Card.CardFactory;
+import de.rkable.spaceTCG.Card.CardSupplier;
 
 /**
  * Provides access to all available cards
@@ -11,30 +11,42 @@ import de.rkable.spaceTCG.Card.CardFactory;
  */
 public class CardLibrary {
 	
-	private static CardFactory[] TIER_1 = new CardFactory[] {
-		() -> {return BurstLaser.createTier1();},
-		() -> {return Laser.createTier1();}
+	private static CardFactory[] factories = new CardFactory[] {
+			Laser.FACTORY,
+			Cannon.FACTORY,
+			BurstLaser.FACTORY,
+			Minigun.FACTORY,
 	};
 	
-	private static CardFactory[] TIER_2 = new CardFactory[] {
-			() -> {return BurstLaser.createTier2();},
-			() -> {return Laser.createTier2();}
-	};
+	private List<CardSupplier> tier1Cards = new ArrayList<>();
+	private List<CardSupplier> tier2Cards = new ArrayList<>();
+	private List<CardSupplier> tier3Cards = new ArrayList<>();
+
 	
-	private static CardFactory[] TIER_3 = new CardFactory[] {
-			() -> {return BurstLaser.createTier3();},
-			() -> {return Laser.createTier3();}
-	};
+	public CardLibrary() {
+		for (CardFactory factory : factories) {
+			if (factory.hasTier1()) {
+				tier1Cards.add(factory.getTier1Supplier());
+			}
+			if (factory.hasTier2()) {
+				tier2Cards.add(factory.getTier2Supplier());
+			}
+			if (factory.hasTier3()) {
+				tier3Cards.add(factory.getTier3Supplier());
+			}
+		}
+	}
 	
-	public List<CardFactory> getTier1Cards() {
-		return Arrays.asList(TIER_1);
+	public List<CardSupplier> getTier1Cards() {
+		return tier1Cards;
 	}
 
-	public List<CardFactory> getTier2Cards() {
-		return Arrays.asList(TIER_2);
+	public List<CardSupplier> getTier2Cards() {
+		return tier2Cards;
 	}
 
-	public List<CardFactory> getTier3Cards() {
-		return Arrays.asList(TIER_3);
+	public List<CardSupplier> getTier3Cards() {
+		return tier3Cards;
 	}
+
 }

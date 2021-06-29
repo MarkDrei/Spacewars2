@@ -34,8 +34,8 @@ public class TestFightDisplayBuilder {
 	@Test
 	public void display_containsCards() {
 		FightDisplayBuilder builder = new FightDisplayBuilder();
-		builder.setDeckDisplay(new DeckDisplay(Laser.createTier1(), Laser.createTier1(),
-				Laser.createTier2(), Laser.createTier1()));
+		builder.setDeckDisplay(new DeckDisplay(Laser.FACTORY.createTier1(), Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier2(), Laser.FACTORY.createTier1()));
 		FightDisplay display = builder.build();
 		assertEquals("Laser Mk1", display.deckDisplay.card1.getName());
 		assertEquals("Laser Mk1", display.deckDisplay.card2.getName());

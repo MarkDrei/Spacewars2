@@ -43,8 +43,8 @@ public class TestNeutralOpponent1 {
 		assertTrue(change instanceof DamageAppliedToPlayer);
 		DamageAppliedToPlayer damage = (DamageAppliedToPlayer) change;
 		
-		assertEquals(2, damage.getShipDamage().getHullDamage());
-		assertEquals(5, damage.getShipDamage().getShieldDamage());
+		assertEquals(2, damage.getHullDamage());
+		assertEquals(5, damage.getShieldDamage());
 	}
 	
 	@Test

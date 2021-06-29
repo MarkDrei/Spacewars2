@@ -10,7 +10,7 @@
 - preview next turn of the opponent
 
 # Cards
-
+- finish RechargeShield
 
 
 

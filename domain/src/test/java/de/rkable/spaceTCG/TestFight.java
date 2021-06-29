@@ -37,7 +37,8 @@ public class TestFight {
 		opponentMock = mock(Opponent.class);
 		when(opponentMock.getShip()).thenReturn(new Ship(2));
 		rewardProviderMock = mock(IRewardProvider.class);
-		gameDeckMock = new PlayerDeck(Laser.createTier1(), Laser.createTier1(), Laser.createTier1(), Laser.createTier1());
+		gameDeckMock = new PlayerDeck(Laser.FACTORY.createTier1(), Laser.FACTORY.createTier1(),
+				Laser.FACTORY.createTier1(), Laser.FACTORY.createTier1());
 		player = spy(new Player(new Ship(1), gameDeckMock));
 		fight = new Fight(player, opponentMock, rewardProviderMock);
 		
@@ -79,8 +80,8 @@ public class TestFight {
 	@SuppressWarnings("boxing")
 	@Test
 	public void playCard_withMultipleEffects_appliesOnlyEffectsUntilVictory() throws IllegalUserOperation {
-		gameDeckMock = new PlayerDeck(BurstLaser.createTier1(), BurstLaser.createTier1(), 
-				BurstLaser.createTier1(), BurstLaser.createTier1());
+		gameDeckMock = new PlayerDeck(BurstLaser.FACTORY.createTier1(), BurstLaser.FACTORY.createTier1(), 
+				BurstLaser.FACTORY.createTier1(), BurstLaser.FACTORY.createTier1());
 		fight = new Fight(new Player(new Ship(2), gameDeckMock), opponentMock, rewardProviderMock);
 		fight.addFightEventListener(eventListenerMock);
 		when(player.isAlive()).thenReturn(true);
@@ -218,7 +219,7 @@ public class TestFight {
 
 				@Override
 				public Card answer(InvocationOnMock invocation) throws Throwable {
-					return Laser.createTier1();
+					return Laser.FACTORY.createTier1();
 				}
 			});
 			
