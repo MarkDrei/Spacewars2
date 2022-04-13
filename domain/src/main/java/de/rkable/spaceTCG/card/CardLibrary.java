@@ -6,7 +6,7 @@ import java.util.List;
 import de.rkable.spaceTCG.Card.CardSupplier;
 
 /**
- * Provides access to all available cards
+ * Provides access to all available cards.
  *
  */
 public class CardLibrary {

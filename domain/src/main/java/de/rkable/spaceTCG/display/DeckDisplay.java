@@ -2,6 +2,10 @@ package de.rkable.spaceTCG.display;
 
 import de.rkable.spaceTCG.Card;
 
+/**
+ * Immutable class which describes the drawn cards.
+ *
+ */
 public class DeckDisplay {
 	
 	public final Card card1;

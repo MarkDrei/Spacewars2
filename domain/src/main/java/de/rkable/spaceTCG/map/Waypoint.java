@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * A waypoint is a visitable point on the GameMap
+ * A waypoint is a visitable point on the {@link WorldMap}
  *
  */
 public class Waypoint {
