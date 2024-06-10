@@ -1,0 +1,15 @@
+@startuml
+
+
+[API] <<..spaceTCG.api>> as api
+[Card] <<..spaceTCG.card>> as card
+[Display] <<..spaceTCG.display>> as display
+[Game State Changes] <<..spaceTCG.gameStats.change>> as change
+[Map] <<..spaceTCG.map>> as map
+[Opponent] <<..spaceTCG.opponent>> as opponent
+[Player] <<..spaceTCG.player>> as player
+[Reward] <<..spaceTCG.reward>> as reward
+[Main / Root package] <<..spaceTCG>> as main
+
+
+@enduml

@@ -1,5 +1,9 @@
 # Spacewars 2 Domain
 
+## Overview
+
+The following diagram provides an overview over the participating modules.
+
 ## Startup / Game class
 
 Startup is realized by `SpaceTcgMain` which provides a number of static methods to create initial game objects,

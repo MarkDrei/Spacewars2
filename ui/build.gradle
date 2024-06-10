@@ -13,13 +13,17 @@ application {
 }
 
 
-sourceCompatibility = 1.11
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 
 dependencies {
     implementation project(':domain')
     implementation ('org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.+')
     testImplementation (platform('org.junit:junit-bom:5+'))
     testImplementation ('org.junit.jupiter:junit-jupiter')
+    
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 
